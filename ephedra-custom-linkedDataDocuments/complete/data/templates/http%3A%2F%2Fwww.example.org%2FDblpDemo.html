@@ -1,0 +1,41 @@
+<ol class="page-breadcrumb">
+    <li class="active">
+        Demo
+    </li>
+</ol>
+
+<div class="page">
+  <div class='page__body'>
+    <h2>Demo page</h2>
+    
+ 
+    <p><b>Example: Linked Data Documents from DBLP</b>
+      
+    <p>The following table lists the publications of <i>Peter Haase</i> and retrieves the data from DBLP Linked Data documents. Note that documents are followed recursively.</p>
+    
+    <semantic-context repository='ephedra-demo'>
+      <semantic-table 
+   	 query="
+        SELECT ?title ?year ?conference WHERE {
+          BIND (<https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> AS ?ldDocument) .
+          SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data> {
+            ?subj <http://www.metaphacts.com/ontologies/ld#document> ?ldDocument .
+            ?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> . 
+            ?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true .
+            ?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication .
+            ?publication <https://dblp.org/rdf/schema-2017-04-18#title> ?title .
+            ?publication <https://dblp.org/rdf/schema-2017-04-18#yearOfPublication> ?year .
+            ?publication <https://dblp.org/rdf/schema-2017-04-18#publishedInBook> ?conference
+          }
+        }"
+      column-configuration='[
+          {"variableName": "title", "displayName": "Title"},
+          {"variableName": "year", "displayName": "Year"},
+          {"variableName": "conference", "displayName": "Conference"}
+  			]'
+      ></semantic-table>
+		</semantic-context>
+  
+ 
+  </div>
+</div>

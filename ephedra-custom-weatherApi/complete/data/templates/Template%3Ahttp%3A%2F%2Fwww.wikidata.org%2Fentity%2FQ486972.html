@@ -1,0 +1,57 @@
+[[#> "Template:http://wikidata.org/ontology/Item" customTabs=true]]
+  [[#*inline "customTabs"]]
+		
+		[[#if (ask "ASK {?? wdt:P625 ?coordinateLocation}")]]
+			<bs-tab event-key="6" title='Weather'>
+			 
+				<p>Three day forecast</p>
+				
+				<semantic-context repository='ephedra-demo'>
+	      <semantic-query 
+	        query='
+	            PREFIX weather: <http://www.metaphacts.com/ontologies/weather#> 
+	            SELECT ?summary ?time ?apparentTemperatureMin ?apparentTemperatureMax ?icon WHERE { 
+
+	            BIND ("[[singleValueFromSelect "SELECT (STR(?coordinateLocation) AS ?out) WHERE {?? wdt:P625 ?coordinateLocation . } "]]" AS ?coordinateLocation) .
+				BIND (REPLACE(STR(?coordinateLocation), "^Point.(-?[0-9.]+) (-?[0-9.]+).*", "$1") AS ?longitude) .
+				BIND (REPLACE(STR(?coordinateLocation), "^Point.(-?[0-9.]+) (-?[0-9.]+).*", "$2") AS ?latitude) .
+	            
+	            SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#weather-api> {
+	              ?item weather:longitude ?longitude .  
+	              ?item weather:latitude ?latitude . 
+	              ?item weather:dataPointObject "summary" . 
+	              ?item weather:dataPointObject "time" . 
+	              ?item weather:dataPointObject "apparentTemperatureMin" . 
+	              ?item weather:dataPointObject "apparentTemperatureMax" . 
+	              ?item weather:dataPointObject "icon" . 
+	            }
+	            
+	          } LIMIT 3
+	        ' 
+	        template='{{> template}}'
+	        style='display: inline;'
+	      >
+	        <template id='template'>
+	          <div>
+	            {{#each bindings}}
+	            	<div style="float:left; margin: 10px; background: #e9ecef; width: 180px; padding: 5px; text-align: center; border: 1px darkgray solid;">
+	                <span style="padding-bottom: 5px"><b>{{dateTimeFormat time.value "YYYY MM DD"}}</b></span><br/>
+	                <img src="/images/weather/{{icon.value}}.svg" title="{{summary.value}}" /><br/>
+	              	<span style="font-size: 0.8em;">Min: {{apparentTemperatureMin.value}}°C, Max: {{apparentTemperatureMax.value}}°C</span>
+	              </div>
+	            {{/each}}
+	            <div style="clear: both;">
+	          </div>
+	            
+	   
+	        </template>
+	      </semantic-query>
+      
+   				</semantic-context>
+   				
+   			<p><span style="font-size: 0.8em"><a href="https://darksky.net/poweredby/" target="_BLANK">Powered by Dark Sky</a></span></p>
+   
+			</bs-tab>
+		[[/if]]
+  [[/inline]]
+[[/Template:http://wikidata.org/ontology/Item]]

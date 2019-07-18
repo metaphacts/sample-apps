@@ -1,0 +1,34 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+buildDir = "target"
+archivesBaseName = 'weather-api'
+version = '0.1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply from: '../../.sdk/dependencies.include.gradle'
+
+eclipse {
+	project {
+		name = 'weather-api-source'
+	}
+}
+
+task deploy(dependsOn: jar);
+deploy.doLast {
+
+	delete('../initial/lib/')
+	copy {
+		into '../initial/lib/'
+		from jar
+	}
+	
+	delete('../complete/lib/')
+	copy {
+		into '../complete/lib/'
+		from jar
+	}
+}

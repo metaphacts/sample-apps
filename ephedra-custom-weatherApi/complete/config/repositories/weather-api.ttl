@@ -1,0 +1,16 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a rep:Repository;
+  rep:repositoryID "weather-api";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          sail:sailType "metaphacts:WeatherApi" ;
+          <http://www.metaphacts.com/ontologies/weather-cfg#apiKey> "YOUR-API-KEY-HERE";
+        ]
+    ];
+  rdfs:label "Repository to connect to the Dark Sky weather API." .
