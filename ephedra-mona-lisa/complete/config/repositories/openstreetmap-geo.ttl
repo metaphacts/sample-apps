@@ -1,0 +1,22 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a rep:Repository;
+  rep:repositoryID "openstreetmap-geo";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          <http://www.metaphacts.com/ontologies/platform/ephedra#httpHeader> [
+              <http://www.metaphacts.com/ontologies/platform/ephedra#name> "Accept";
+              <http://www.metaphacts.com/ontologies/platform/ephedra#value> "application/json"
+            ];
+          <http://www.metaphacts.com/ontologies/platform/ephedra#httpMethod> "GET";
+          <http://www.metaphacts.com/ontologies/platform/ephedra#implementsService> <http://www.metaphacts.com/ontologies/osm#openstreetmap-geo>;
+          <http://www.metaphacts.com/ontologies/platform/ephedra#serviceURL> "https://nominatim.openstreetmap.org/search";
+          sail:sailType "metaphacts:RESTService"
+        ]
+    ];
+  rdfs:label "Repository to test the generic service wrapper applied to OpenStreetMap." .

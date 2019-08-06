@@ -1,0 +1,100 @@
+<ol class="page-breadcrumb">
+    <li class="active">
+        Demo
+    </li>
+</ol>
+
+<div class="page">
+  <div class='page__body'>
+    <h2>Demo page</h2>
+    
+  
+
+    <p><b>Example: Weather in Walldorf</b>
+      
+    <p>The following demo illustrates the weather in Walldorf</p>
+    
+    <p>a) daily weather forecast next five days</p>
+      
+    <semantic-context repository='ephedra-demo'>
+      <semantic-query 
+        query='
+          PREFIX weather: <http://www.metaphacts.com/ontologies/weather#> 
+					SELECT ?summary ?time ?apparentTemperatureMin ?apparentTemperatureMax ?icon WHERE { 
+            BIND ("8.65" AS ?longitude) .
+            BIND ("49.3" AS ?latitude) .
+            SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#weather-api> {
+              ?item weather:longitude ?longitude .  
+              ?item weather:latitude ?latitude . 
+              ?item weather:dataPointObject "summary" . 
+              ?item weather:dataPointObject "time" . 
+              ?item weather:dataPointObject "apparentTemperatureMin" . 
+              ?item weather:dataPointObject "apparentTemperatureMax" . 
+              ?item weather:dataPointObject "icon" . 
+            }
+          } LIMIT 5
+        ' 
+        template='{{> template}}'
+        style='display: inline;'
+      >
+        <template id='template'>
+          <div>
+            {{#each bindings}}
+            	<div style="float:left; margin: 10px; background: #e9ecef; width: 180px; padding: 5px; text-align: center; border: 1px darkgray solid;">
+                <span style="padding-bottom: 5px"><b>{{dateTimeFormat time.value "YYYY MM DD"}}</b></span><br/>
+                <img src="/images/weather/{{icon.value}}.svg" title="{{summary.value}}" /><br/>
+              	<span style="font-size: 0.8em;">Min: {{apparentTemperatureMin.value}}°C, Max: {{apparentTemperatureMax.value}}°C</span>
+              </div>
+            {{/each}}
+            <div style="clear: both;">
+          </div>
+            
+   
+        </template>
+      </semantic-query>
+   </semantic-context>
+   
+      
+      <p>a) hourly forecast for the next 24 hours</p>
+      
+    <semantic-context repository='ephedra-demo'>
+      <semantic-query 
+        query='
+          PREFIX weather: <http://www.metaphacts.com/ontologies/weather#> 
+					SELECT ?summary ?time ?apparentTemperature ?icon WHERE { 
+            BIND ("8.65" AS ?longitude) .
+            BIND ("49.3" AS ?latitude) .
+            SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#weather-api> {
+              ?item weather:longitude ?longitude .  
+              ?item weather:latitude ?latitude . 
+              ?item weather:block "hourly" .
+              ?item weather:dataPointObject "summary" . 
+              ?item weather:dataPointObject "time" . 
+              ?item weather:dataPointObject "apparentTemperature" . 
+              ?item weather:dataPointObject "icon" . 
+            }
+          } LIMIT 24
+        ' 
+        template='{{> template}}'
+        style='display: inline;'
+      >
+        <template id='template'>
+          <div>
+            {{#each bindings}}
+            	<div style="float:left; margin: 10px; background: #e9ecef; width: 180px; padding: 5px; text-align: center; border: 1px darkgray solid;">
+                <span style="padding-bottom: 5px"><b>{{dateTimeFormat time.value "YYYY MM DD - hh:mm"}}</b></span><br/>
+                <img src="/images/weather/{{icon.value}}.svg" title="{{summary.value}}" /><br/>
+              	<span style="font-size: 0.8em;">Temperature: {{apparentTemperature.value}}°C</span>
+              </div>
+            {{/each}}
+            <div style="clear: both;">
+          </div>
+            
+   
+        </template>
+      </semantic-query>
+   </semantic-context>
+      
+    
+  </div>
+</div>
