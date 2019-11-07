@@ -27,7 +27,7 @@ public class LinkedDataDocumentServiceSailTest {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
         repo.setDataDir(tempFolder.newFolder("dataDir"));
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -60,7 +60,7 @@ public class LinkedDataDocumentServiceSailTest {
          */
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
         repo.setDataDir(tempFolder.newFolder("dataDir"));
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -84,7 +84,7 @@ public class LinkedDataDocumentServiceSailTest {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
         repo.setDataDir(tempFolder.newFolder("dataDir"));
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -112,7 +112,7 @@ public class LinkedDataDocumentServiceSailTest {
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
 //		repo.setDataDir(tempFolder.newFolder("dataDir"));
         repo.setDataDir(new File("tmp/cache"));
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 

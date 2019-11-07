@@ -46,10 +46,14 @@ import org.eclipse.rdf4j.sail.SailConnection;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.helpers.AbstractSailConnection;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
 public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnection {
+
+    private static final Logger logger = LoggerFactory.getLogger(LinkedDataDocumentServiceSailConnection.class);
 
     private static final String NAMESPACE = "http://www.metaphacts.com/ontologies/ld#";
     public static final IRI LD_RESOURCE = SimpleValueFactory.getInstance().createIRI(NAMESPACE, "document");

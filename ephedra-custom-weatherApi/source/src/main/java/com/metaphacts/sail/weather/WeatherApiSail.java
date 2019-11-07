@@ -10,8 +10,12 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.sail.SailConnection;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.helpers.AbstractSail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WeatherApiSail extends AbstractSail {
+
+    private static final Logger logger = LoggerFactory.getLogger(WeatherApiSail.class);
 
     protected HttpClient httpClient;
 

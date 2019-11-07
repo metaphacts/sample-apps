@@ -23,7 +23,7 @@ public class WeatherSailTest {
         WeatherApiSail sail = new WeatherApiSail();
         sail.setApiKey(API_KEY);
         SailRepository repo = new SailRepository(sail);
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -59,7 +59,7 @@ public class WeatherSailTest {
         WeatherApiSail sail = new WeatherApiSail();
         sail.setApiKey(API_KEY);
         SailRepository repo = new SailRepository(sail);
-        repo.initialize();
+        repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 

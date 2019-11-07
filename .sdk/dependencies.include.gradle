@@ -2,19 +2,45 @@ repositories {
 	mavenCentral();
 }
 
+project.ext {
+	RDF4J_VERSION = '3.0.2'
+}
+
 dependencies {
 	
 	// provided dependencies by metaphactory
-	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-client', version: '2.4.3', transitive: false
-	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-storage', version: '2.4.3', transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-manager', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-sail', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-sparql', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-http', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-nativerdf', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-memory', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-federation', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-api', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-binary', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-jsonld', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-n3', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-nquads', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-rdfjson', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-rdfxml', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-trig', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-trix', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-turtle', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-model', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-query', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-model', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-util', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryrender', version: RDF4J_VERSION
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryresultio-sparqljson', version: RDF4J_VERSION
 	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25', transitive: false
 	compileOnly group: 'com.google.guava', name: 'guava', version: '23.6-jre', transitive: false
 	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5', transitive: false
 	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.9', transitive: false
 	compileOnly group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.5', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.6', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9', transitive: false
 	
 	testRuntime group: 'commons-io', name: 'commons-io', version: '2.6', transitive: false
 	testRuntime group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
