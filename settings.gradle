@@ -1,0 +1,45 @@
+
+
+// include holder project for gretty
+include 'jetty'
+project(':jetty').setProjectDir(file('target/jetty'))
+
+
+// dynamically discovered app modules
+for (app in findApps(file('.'), 0)) {
+	include toFullProjectName(app.parentFile, app.name)
+}
+
+def findApps(File currentDir, int level) {
+	def apps = [];
+	if (level >= 2) {
+		return apps;
+	}
+	currentDir.eachFile() { f ->
+		if (!f.isDirectory()) { /* ignore */ }
+		else if (f.name == 'buildSrc') { /* ignore */  }
+		// check if the module is an app folder
+		else if (isAppDir(f)) {
+			apps << f;
+		} else {
+			apps.addAll(findApps(f, level+1));
+		}
+	}
+	return apps
+}
+
+
+def isAppDir(File dir) {
+	if (!dir.isDirectory()) {
+		return false;
+	}
+	if (!(new File(dir, 'plugin.properties').isFile())) {
+		return false;
+	}
+	return true;
+}
+
+def toFullProjectName(File parentFolder, String projectName) {
+	String relPath = rootProject.projectDir.toPath().relativize(parentFolder.toPath()).toString();
+	relPath.replace('/', ':').replace('\\', ':') + ':' + projectName
+}

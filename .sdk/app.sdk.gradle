@@ -1,0 +1,67 @@
+/*
+ * App SDK definiton
+ *
+ * (c) 2020 metaphacts GmbH
+ *
+ * This script is assumed to be included in all app projects
+ */
+
+project.logger.info("Configuring app project " + project.name)
+	
+repositories {
+	mavenCentral()
+}
+
+// give test dependencies access to compileOnly dependencies to emulate providedCompile
+configurations {
+	testImplementation.extendsFrom compileOnly
+}
+
+
+def appCopySpec = project.copySpec {
+	from (project.getProjectDir()) {
+		include("assets/**/*")
+		include("classes/**/*")
+		include("config/**/*")
+		include("data/**/*")
+		include("images/**/*")	// TODO deprecated
+		include("ldp/**/*")
+		include("lib/**/*")
+		include("plugin.properties")
+		include("_bootstrap/**/*")
+		
+		// make sure to never copy code
+		exclude("src/**/*")
+	}
+	
+	// jar (if the app has sources)
+	if (file('src/main/java').exists()) {
+		into("lib") {
+			from jar
+		}
+	}
+	
+	// dependencies
+	into("lib") {
+		from configurations.runtimeClasspath
+	}
+	
+	// TODO resources
+}
+
+def appsTargetFolder = rootProject.file("target/apps")
+def deployFolder = project.file("target/deploy");
+
+task deploy(type: Copy) {
+	into deployFolder;
+	with appCopySpec;
+	outputs.upToDateWhen { false } // always re-do
+	doFirst {
+		delete project.file('target/deploy')
+	}
+}
+
+task appZip(type: Zip, dependsOn: 'deploy') {
+	from deployFolder;
+	destinationDirectory = appsTargetFolder
+}

@@ -5,3 +5,5 @@ target
 .classpath
 bin
 tmp
+runtime
+gradle.properties

@@ -1,0 +1,4 @@
+# the platform location pointing to the WAR distribution binary
+platformLocation=/path/to/platform-3.3.0.war
+# the apps available at runtime
+apps=my-first-app

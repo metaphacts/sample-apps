@@ -1,0 +1,81 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "gradle.plugin.org.gretty:gretty:3.0.1"
+	}
+}
+
+
+logger.lifecycle("Running gradle version: $gradle.gradleVersion (JVM " + System.getProperty("java.version") + ")")
+
+
+project.ext.appProjects = subprojects.findAll { it.file('plugin.properties').isFile() }
+
+apply from: rootProject.file('.sdk/platform.sdk.gradle')
+
+allprojects {
+	buildDir 'target'
+	apply from: rootProject.file('.sdk/utils.gradle')
+}
+
+configure(appProjects) {
+
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'eclipse'
+	
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	apply from: rootProject.file('.sdk/app.sdk.gradle')
+	apply from: rootProject.file('.sdk/dependencies.include.gradle')
+}
+
+task appZip {
+	doFirst {
+		project.logger.lifecycle("App artifacts will be created to target/apps")
+	}
+}
+
+// Documentation
+help.doLast {
+	println """
+Available commands:
+
+./gradlew clean appZip
+./gradlew prepareEnvironment
+./gradlew appRun
+./gradlew -Ddebug=true appRun
+./gradlew cleanEclipse eclipse
+
+The SDK provides integrated means of running the platform from Gradle in a Jetty Webserver.
+As a pre-requisite the location of the platform's WAR distribution needs to be provided
+using the 'platformLocation' setting, e.g. in gradle.properties (see also gradle.properties.template).
+Before running the platform the first time, make sure to invoke 'gradlew prepareEnvironment'.
+
+A WAR distribution of the platform can be obtained from a running docker-compose environment:
+
+> docker cp <container-id>:/var/lib/jetty/webapps/ROOT.war platform.war
+
+Additionally, this SDK provides convenience for developing, running and deploying apps. Artifacts
+can be produced using the 'gradlew appZip' command and can be found in 'target/apps'. For development
+apps can be seamlessly deployed in the running application by specifying the 'apps' setting, 
+e.g. in 'gradle.properties'.
+
+
+Available settings:
+
+System properties can be defined using `-Dprop=value` in the `./gradlew` command (e.g. `./gradlew -Ddebug=true appRun`) or 
+in `gradle.properties` in the project root folder using the prefix `systemProp.` (see also `gradle.properties.template`).
+
+runtimeDirectory => location of the runtime directory (relative to root project). Default: runtime
+log => log4j configuration profile (supported values: log4j2 log4j2-debug, log4j2-trace, log4j2-trace2) Default: log4j2-debug
+debug => whether JVM debug is enabled (default port 5005)
+debug.port => JVM debug port. Default: 5005
+debug.suspend => suspend on debug (true|false). Default: false
+"""
+}
