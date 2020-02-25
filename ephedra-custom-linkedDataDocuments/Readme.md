@@ -4,4 +4,5 @@ This app demonstrates how a custom Linked Data Documents wrapper can be used wit
 
 A full tutorial describing the setup and scenario in detail is available [here](../tutorials/dblp/dblp.md).
 
-The app is available in different stages of completion: _source_, _initial_ and _complete_.
+After deployment the basic example is available on http://localhost:10214/resource/?uri=http://www.example.org/DblpDemo
+

@@ -4,4 +4,6 @@ This app demonstrates how a custom weather API service can be integrated and acc
 
 A full tutorial describing the setup and scenario in detail is available [here](../tutorials/weather/weather.md).
 
-The app is available in different stages of completion: _source_, _initial_ and _complete_.
+The basic example is available on http://localhost:10214/resource/?uri=http://www.example.org/WeatherDemo
+
+In case the wikidata app is installed, the integration example for Portoroz can be found on http://localhost:10214/resource/wd:Q564988

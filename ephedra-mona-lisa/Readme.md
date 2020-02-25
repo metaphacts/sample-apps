@@ -7,3 +7,5 @@ Our simple example use case will deal with museum artifacts and their storage lo
 A full tutorial describing the setup and scenario in detail is available [here](../tutorials/monalisa/monalisa.md).
 
 The complete example is available in this folder.
+
+After deployment the basic example is available on http://localhost:10214/resource/?uri=http://www.example.org/MonaLisaDemo
