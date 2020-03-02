@@ -4,6 +4,8 @@ This app demonstrates how a custom weather API service can be integrated and acc
 
 A full tutorial describing the setup and scenario in detail is available [here](../tutorials/weather/weather.md).
 
+Before deployment make sure to enter your valid API key to `config/repositories/weather-api.ttl`.
+
 The basic example is available on http://localhost:10214/resource/?uri=http://www.example.org/WeatherDemo
 
-In case the wikidata app is installed, the integration example for Portoroz can be found on http://localhost:10214/resource/wd:Q564988
+

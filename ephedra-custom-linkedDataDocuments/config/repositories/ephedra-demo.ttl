@@ -1,22 +1,16 @@
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rep: <http://www.openrdf.org/config/repository#> .
-@prefix sail: <http://www.openrdf.org/config/sail#> .
-@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix fedsail: <http://www.openrdf.org/config/sail/federation#> .
-@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
 
 [] a rep:Repository;
   rep:repositoryID "ephedra-demo";
   rep:repositoryImpl [
-      rep:repositoryType "metaphacts:FederationSailRepository";
-      sr:sailImpl [
-          ephedra:defaultMember "default";
-          sail:sailType "metaphacts:Federation";
-          fedsail:member [
-              ephedra:delegateRepositoryID "linked-data";
-              ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data>
-            ] 
-        ]
+      ephedra:defaultMember "default";
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "linked-data";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data>
+        ];
+      rep:repositoryType "metaphacts:EphedraRepository"
     ];
   rdfs:label "Local Ephedra federation with wikidata extensions" .
