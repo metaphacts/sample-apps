@@ -41,13 +41,14 @@ task unzipWar(type: Copy) {
 	}
 }
 
-task prepareEnvironment(dependsOn: unzipWar) {
-
-}
-
 task cleanWebapp(type: Delete) {
 	delete webappDir
 }
+
+task prepareEnvironment(dependsOn: [cleanWebapp, unzipWar]) {
+
+}
+
 
 task clean() {
 	delete 'target/apps'

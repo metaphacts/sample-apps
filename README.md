@@ -40,6 +40,8 @@ docker cp <container-id>:/var/lib/jetty/webapps/ROOT.war platform.war
 
 In the above command replace `<container-id>` with the ID of the running container. Hint: use `docker ps` to list the running containers.
 
+__Note__: when updating the platform version it is required to re-run `gradlew prepareEnvironment`
+
 
 ### Getting Started
 
