@@ -1,5 +1,5 @@
 project.ext {
-	RDF4J_VERSION = '3.0.2'
+	RDF4J_VERSION = '3.1.1'
 	JERSEY_VERSION = "2.22.2"
 }
 
@@ -48,13 +48,12 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryrender', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-evaluation', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25', transitive: false
-	compileOnly group: 'com.google.guava', name: 'guava', version: '23.6-jre', transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5', transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.9', transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.5', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9', transitive: false
+	compileOnly group: 'com.google.guava', name: 'guava', version: '28.2-jre', transitive: false
+	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.9', transitive: false
+	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.11', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1', transitive: false
 	compileOnly group: 'org.pf4j', name: 'pf4j', version: '3.2.0'
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-server', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-client', version: JERSEY_VERSION
