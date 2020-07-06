@@ -4,7 +4,6 @@ const concat = require('concat');
   const files = [
     './dist/hello-world-angular/runtime.js',
     './dist/hello-world-angular/polyfills.js',
-    './dist/hello-world-angular/scripts.js',
     './dist/hello-world-angular/main.js',
   ]
   await fs.ensureDir('target')
