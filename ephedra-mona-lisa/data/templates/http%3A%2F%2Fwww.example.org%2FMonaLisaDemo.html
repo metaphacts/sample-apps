@@ -15,29 +15,30 @@
 
 		<div style="width:800px; height: 500px">
 		
-		<semantic-context repository='ephedra-demo'> 
-			<semantic-map id='map-result' query='
-				PREFIX wd: <http://www.wikidata.org/entity/> 
-				PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
-				PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-				PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-				PREFIX mp-fed: <http://www.metaphacts.com/ontologies/platform/repository/federation#> 
-				PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-				SELECT ?link ?wkt WHERE { 
-					SERVICE <https://wikidata.metaphacts.com/sparql> { 
+		
+		<semantic-map id='map-result' query='
+			PREFIX wd: <http://www.wikidata.org/entity/> 
+			PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
+			PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+			PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
+			PREFIX mp-fed: <http://www.metaphacts.com/ontologies/platform/repository/federation#> 
+			PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
+			SELECT ?link ?wkt ?label WHERE { 
+				SERVICE <https://wikidata.metaphacts.com/sparql> { 
 						wd:Q12418 wdt:P276/wdt:P361* ?museum . 
 						?museum wdt:P131 ?geolocation . 
 						?geolocation rdfs:label ?label . 
-					} 
-					SERVICE mp-fed:openstreetmap-geo { 
-						?result osm:hasSearchTerm ?label . 
-						?result osm:wktGeotext ?wkt . 
-					} 
-					FILTER(STRSTARTS(STR(?wkt), "POLYGON")) 
-				} LIMIT 1 '
-		    fix-zoom-level=12 > 
-			</semantic-map> 
-		</semantic-context>
+						FILTER (LANG(?label) = "en")
+				} 
+				SERVICE mp-fed:openstreetmap-geo { 
+					?result osm:hasSearchTerm ?label . 
+					?result osm:wktGeotext ?wkt . 
+				} 
+				FILTER(STRSTARTS(STR(?wkt), "POLYGON")) 
+			} LIMIT 1 '
+		fix-zoom-level=12
+		tuple-template='<b>{{label.value}}</b>'> 
+		</semantic-map>
 		
 		</div>
 

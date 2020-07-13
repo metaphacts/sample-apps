@@ -4,13 +4,18 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 [] a rep:Repository;
-  rep:repositoryID "ephedra-demo";
+  rep:repositoryID "defaultEphedra";
   rep:repositoryImpl [
-      ephedra:defaultMember "default";
+      ephedra:defaultMember "proxyToDefault";
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "lookup";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/repository#lookup>
+        ];
       ephedra:serviceMember [
           ephedra:delegateRepositoryID "openstreetmap-geo";
           ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo>
         ];
+      ephedra:writable true;
       rep:repositoryType "metaphacts:EphedraRepository"
     ];
-  rdfs:label "Local Ephedra federation with wikidata extensions" .
+  rdfs:label "Ephedra federation" .

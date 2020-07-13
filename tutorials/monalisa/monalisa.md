@@ -266,48 +266,62 @@ Although now we can query the REST API with SPARQL, this does not give much adde
 
 Ephedra federation is configured as a separate repository in the platform that combines other repositories as federation members. Each Ephedra federation has one mandatory default federation member and an arbitrary number of additional ones which are referenced by their alias URIs.
 
-The Ephedra repository can be configured on the _Repository administration_ page, i.e. _"/resource/Admin:Repositories"_ in your metaphactory installation. Create a new repository configuration (or amend an existing one) using the id _'ephedra-demo'_ and use the configuration below.
+The Ephedra repository can be configured on the _Repository administration_ page, i.e. _"/resource/Admin:Repositories"_ in your metaphactory installation. 
+
+As of the 3.5 release it is easiest to reuse the `defaultEphedra` federation and add the `openstreetmap-geo` repository as additional member:
+
 
 ```
+ephedra:serviceMember [
+   ephedra:delegateRepositoryID "openstreetmap-geo";
+   ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo>
+];
+```
+
+For reference, a complete definition of the repository federation may look as follows:
+
+```
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rep: <http://www.openrdf.org/config/repository#> .
-@prefix sail: <http://www.openrdf.org/config/sail#> .
-@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix fedsail: <http://www.openrdf.org/config/sail/federation#> .
-@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
 
 [] a rep:Repository;
-  rep:repositoryID "ephedra-demo";
+  rep:repositoryID "defaultEphedra";
   rep:repositoryImpl [
-      rep:repositoryType "metaphacts:FederationSailRepository";
-      sr:sailImpl [
-          ephedra:defaultMember "default";
-          sail:sailType "metaphacts:Federation";
-          fedsail:member [
-              ephedra:delegateRepositoryID "openstreetmap-geo";
-              ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo>
-            ]
-        ]
+      ephedra:defaultMember "proxyToDefault";
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "lookup";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/repository#lookup>
+        ];
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "openstreetmap-geo";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo>
+        ];
+      ephedra:writable true;
+      rep:repositoryType "metaphacts:EphedraRepository"
     ];
-  rdfs:label "Local Ephedra federation with wikidata extensions" .
+  rdfs:label "Ephedra federation" .
 ```
+
 
 The most relevant part is to define a new federation member, i.e. using the _delegateRepositoryID_ and the _serviceReference_ properties. Note that the service reference points to the IRI that can be used in the SERVICE clause.
 
+Note that as of 3.5.0 metaphactory uses `defaultEphedra` as the active default repository. See [here](https://help.metaphacts.com/resource/Help:EphedraAsDefaultRepository) for details.
 
-After creating and applying the Ephedra configuration, you can test it by sending the following example query to the _ephedra-demo_ repository using the SPARQL interface:
+After creating and applying the Ephedra configuration, you can test it by executing the following example query using the SPARQL interface:
 
 ```
 PREFIX wd: <http://www.wikidata.org/entity/> 
 PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
 PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-SELECT ?label ?wkt WHERE { 
+SELECT ?label ?wkt ?label WHERE { 
   SERVICE <https://wikidata.metaphacts.com/sparql> { 
     wd:Q12418 wdt:P276/wdt:P361* ?museum . 
     ?museum wdt:P131 ?geolocation . 
     ?geolocation rdfs:label ?label . 
+    FILTER (LANG(?label) = "en")
   } 
   SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo> { 
     ?result osm:hasSearchTerm ?label . 
@@ -332,27 +346,27 @@ The result of this query is applied in the metaphactory platform to display the 
 
 
 ```
-<semantic-context repository='ephedra-demo'> 
-	<semantic-map id='map-result' query='
-		PREFIX wd: <http://www.wikidata.org/entity/> 
-		PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
-		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-		PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-		SELECT ?link ?wkt WHERE { 
-			SERVICE <https://wikidata.metaphacts.com/sparql> { 
-				wd:Q12418 wdt:P276/wdt:P361* ?museum . 
-				?museum wdt:P131 ?geolocation . 
-				?geolocation rdfs:label ?label . 
-			} 
-			SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo> { 
-				?result osm:hasSearchTerm ?label . 
-				?result osm:wktGeotext ?wkt . 
-			} 
-			FILTER(STRSTARTS(STR(?wkt), "POLYGON")) 
-		} LIMIT 1 '
-	fix-zoom-level=12 > 
-	</semantic-map> 
-</semantic-context>
+<semantic-map id='map-result' query='
+	PREFIX wd: <http://www.wikidata.org/entity/> 
+	PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+	PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
+	SELECT ?link ?wkt ?label WHERE { 
+		SERVICE <https://wikidata.metaphacts.com/sparql> { 
+			wd:Q12418 wdt:P276/wdt:P361* ?museum . 
+			?museum wdt:P131 ?geolocation . 
+			?geolocation rdfs:label ?label . 
+			FILTER (LANG(?label) = "en")
+		} 
+		SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo> { 
+			?result osm:hasSearchTerm ?label . 
+			?result osm:wktGeotext ?wkt . 
+		} 
+		FILTER(STRSTARTS(STR(?wkt), "POLYGON")) 
+	} LIMIT 1 '
+fix-zoom-level=12
+tuple-template='<b>{{label.value}}</b>'>  
+</semantic-map>
 ```
 
 In the metaphactory platform's the resulting map looks as follows:
