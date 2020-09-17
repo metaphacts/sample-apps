@@ -28,6 +28,7 @@ def appCopySpec = project.copySpec {
 		include("ldp/**/*")
 		include("lib/**/*")
 		include("plugin.properties")
+		include("web-extensions.json")
 		include("_bootstrap/**/*")
 		
 		// make sure to never copy code
