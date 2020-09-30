@@ -17,7 +17,7 @@ Wikidata knowledge graph.
 
 [DBLP.org](https://dblp.org/) (the Digital Bibliography & Library Project) is a website that publishes bibliographical data, such as information on conferences, papers, authors etc. One of the available formats is _RDF/XML_, a representation for Linked Data documents. By navigating to a researcher's DBLP page, it is possible to retrieve an RDF representation of all his or her publications.
 
-Thinking further about this one could come up with the idea to build an application that visualizes this data enriched with structural information from other knowledge graphs (such as wikidata). Here the metaphactory platform is a natural fit.
+Thinking further about this one could come up with the idea to build an application that visualizes this data enriched with structural information from other knowledge graphs (such as Wikidata). Here the metaphactory platform is a natural fit.
 
 In the following we describe how the respective data sources can be configured and registered in the platform, and moreover how the available visualization components can be used for integrating it into an application.
 
@@ -69,8 +69,9 @@ Notes:
 In order to test the configuration, you can use the SPARQL interface to execute the following query against the '_linked-data_' repository. This will retrieve IRIs of all publications by Peter Haase.
 
 ```
+PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
 SELECT ?publication WHERE { 
-<https://dblp.org/pers/h/Haase_0001:Peter> <https://dblp.org/rdf/schema-2017-04-18#authorOf> ?publication .
+<https://dblp.org/pers/h/Haase_0001:Peter> dblp:authorOf ?publication .
 }
 ```
 
@@ -132,8 +133,9 @@ Note that the following examples demonstrate the functionality of the Linked Dat
 The following query (when executed against the _linked-data_ repository) retrieves the publication IRIs. It loads the document by following the 'subject' URL (using content negotiation) and makes the RDF graph (i.e. the outgoing statements) available for querying.
 
 ```
+PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
 SELECT ?publication WHERE { 
-	<https://dblp.org/pers/h/Haase_0001:Peter> <https://dblp.org/rdf/schema-2017-04-18#authorOf> ?publication .
+	<https://dblp.org/pers/h/Haase_0001:Peter> dblp:authorOf ?publication .
 }
 ```
 
@@ -143,9 +145,10 @@ SELECT ?publication WHERE {
 The result of the query is similar to 1), however in this case we provide the document URL explicitly using the '_ld#document_' predicate:
 
 ```
+PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
 SELECT ?subj ?publication WHERE { 
 	?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> .
-	?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication .
+	?subj dblp:authorOf ?publication .
 }
 ```
 
@@ -157,11 +160,12 @@ Note that the '_?subj_' variable is bound to the main resource identifier within
 Sometimes it may be useful to retrieve additional information from linked documents, e.g. in our case details for a given publication IRI. This can be achieved by using the '_ld#follow_' property and pointing to the predicates that should be followed.
 
 ```
+PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
 SELECT ?subj ?publication ?title WHERE { 
 	?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-	?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> . 
-	?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication . 
-	?publication <https://dblp.org/rdf/schema-2017-04-18#title> ?title
+	?subj <http://www.metaphacts.com/ontologies/ld#follow> dblp:authorOf . 
+	?subj dblp:authorOf ?publication . 
+	?publication dblp:title ?title
 }
 ```
 
@@ -170,35 +174,36 @@ During the query execution the documents for each of Peter's publications are re
 Note that the '_ld:followSilent true_' graph pattern can optionally be used to ignore errors (e.g. if a document does not exist yielding to a HTTP 404).
 
 
-### 4. Isolated example running through the ephedra federation.
+### 4. Isolated example running through the Ephedra federation.
 
-The following example shows a visualization of Peter's publications and some additional information in a table. Basically, it uses a combination of above queries and executes them against the ephedra federation.
+The following example shows a visualization of Peter's publications and some additional information in a table. Basically, it uses a combination of above queries and executes them against the Ephedra federation.
 
 ```
 <semantic-context repository='ephedra-demo'>
       <semantic-table 
    	 query="
+        PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
         SELECT ?title ?year ?conference WHERE {
           BIND (<https://dblp.org/pid/h/PeterHaase1.rdf> AS ?ldDocument) .
           SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data> {
             ?subj <http://www.metaphacts.com/ontologies/ld#document> ?ldDocument .
-            ?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2017-04-18#authorOf> . 
-	          ?subj <https://dblp.org/rdf/schema-2017-04-18#authorOf> ?publication .
-				    ?publication <https://dblp.org/rdf/schema-2017-04-18#title> ?title .
-            ?publication <https://dblp.org/rdf/schema-2017-04-18#yearOfPublication> ?year .
-            ?publication <https://dblp.org/rdf/schema-2017-04-18#publishedInBook> ?conference
+            ?subj <http://www.metaphacts.com/ontologies/ld#follow> dblp:authorOf . 
+            ?subj dblp:authorOf ?publication .
+            ?publication dblp:title ?title .
+            ?publication dblp:yearOfPublication ?year .
+            ?publication dblp:publishedInBook ?conference
           }
         }"
       column-configuration='[
           {"variableName": "title", "displayName": "Title"},
           {"variableName": "year", "displayName": "Year"},
           {"variableName": "conference", "displayName": "Conference"}
-  			]'
+      ]'
       ></semantic-table>   
 </semantic-context>
 ```
 
-Note that above query is executed in the semantic context '_ephedra-demo_', i.e. against the ephedra federation engine. Moreover, note that the 'linked-data' federation member is accesses through its SERVICE IRI.
+Note that above query is executed in the semantic context '_ephedra-demo_', i.e. against the Ephedra federation engine. Moreover, note that the 'linked-data' federation member is accesses through its SERVICE IRI.
 
 The result looks similar to the following depiction.
 
@@ -206,11 +211,11 @@ The result looks similar to the following depiction.
 
 ## Integrated example
 
-_Note: this example requires the wikidata app being installed in the metaphactory installation_
+_Note: this example requires the wikidata app being installed in the metaphactory installation_. See https://github.com/metaphacts/wikidata for details.
 
 In the following we provide an integrated and more visual example of how the data from DBLP can be combined with information from the Wikidata knowledge graph.
 
-Let's assume we use the wikidata SPARQL endpoint as our default repository. When navigating to a wikidata resource (say '_wd:Q23831639_', which is the wikidata identifier of Peter Haase) we can make use of the platform's templating mechanims, and for instance display additional information such as the publications and co-authors as tabs.
+Let's assume we use the wikidata SPARQL endpoint as our default repository. When navigating to a wikidata resource (say '_wd:Q23831639_', which is the Wikidata identifier of Peter Haase) we can make use of the platform's templating mechanims, and for instance display additional information such as the publications and co-authors as tabs.
 
 The result may look as follows:
 
@@ -233,6 +238,7 @@ The document URL is then passed into the SERVICE which accesses the _linked-data
 		 <semantic-context repository='ephedra-demo'>
 		  <semantic-table 
 		 query="
+			PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
 			SELECT ?title ?year ?conference WHERE {
 			  
 			   BIND ('[[singleValueFromSelect "SELECT ?dblpUrlRdf WHERE {?? wdt:P2456 ?dblp . ?property  <http://wikiba.se/ontology#directClaim> wdt:P2456 ; wdt:P1630 ?url_template .BIND(REPLACE(?url_template, '\\$1', ?dblp) AS ?url) .  BIND (CONCAT(STR(?url), '.rdf') AS ?dblpUrlRdf) . } "]]' AS ?ldDocument) .
@@ -240,17 +246,17 @@ The document URL is then passed into the SERVICE which accesses the _linked-data
 				
 			  SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data> {
 				?subj <http://www.metaphacts.com/ontologies/ld#document> ?ldDocument .
-				?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2017-04-18#authorOf> . 
-				  ?subj <https://dblp.org/rdf/schema-2017-04-18#authorOf> ?publication .
-						?publication <https://dblp.org/rdf/schema-2017-04-18#title> ?title .
-				?publication <https://dblp.org/rdf/schema-2017-04-18#yearOfPublication> ?year .
-				?publication <https://dblp.org/rdf/schema-2017-04-18#publishedInBook> ?conference
+				?subj <http://www.metaphacts.com/ontologies/ld#follow> dblp:authorOf . 
+				?subj dblp:authorOf ?publication .
+				?publication dblp:title ?title .
+				?publication dblp:yearOfPublication ?year .
+				?publication dblp:publishedInBook ?conference
 			  }
 			}"
 		  column-configuration='[
-			  {"variableName": "title", "displayName": "Title"},
-			  {"variableName": "year", "displayName": "Year"},
-					{"variableName": "conference", "displayName": "Conference"}
+			{"variableName": "title", "displayName": "Title"},
+			{"variableName": "year", "displayName": "Year"},
+			{"variableName": "conference", "displayName": "Conference"}
 				]'
 		  ></semantic-table>
 		</semantic-context>

@@ -33,7 +33,7 @@ public class LinkedDataDocumentServiceSailTest {
 
             String queryString = "SELECT ?subj ?publication WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-                    + "?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication ." 
+                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#authorOf> ?publication ." 
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
@@ -90,10 +90,10 @@ public class LinkedDataDocumentServiceSailTest {
 
             String queryString = "SELECT ?subj ?publication ?title WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> . "
+                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2020-07-01#authorOf> . "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true ."
-                    + "?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication . "
-                    + "?publication <https://dblp.org/rdf/schema-2017-04-18#title> ?title" 
+                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#authorOf> ?publication . "
+                    + "?publication <https://dblp.org/rdf/schema-2020-07-01#title> ?title" 
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
@@ -118,11 +118,11 @@ public class LinkedDataDocumentServiceSailTest {
 
             String queryString = "SELECT ?subj ?coAuthor ?name ?affiliation WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.org/pid/h/PeterHaase1.rdf> ."
-                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2017-04-18#coCreatorWith> . "
+                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2020-07-01#coCreatorWith> . "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true . "
-                    + "?subj <https://dblp.org/rdf/schema-2017-04-18#coCreatorWith> ?coAuthor . "
-                    + "?coAuthor <https://dblp.org/rdf/schema-2017-04-18#primaryFullPersonName> ?name ."
-                    + "OPTIONAL { ?coAuthor <https://dblp.org/rdf/schema-2017-04-18#primaryAffiliation> ?affiliation } "
+                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#coCreatorWith> ?coAuthor . "
+                    + "?coAuthor <https://dblp.org/rdf/schema-2020-07-01#primaryFullCreatorName> ?name ."
+                    + "OPTIONAL { ?coAuthor <https://dblp.org/rdf/schema-2020-07-01#primaryAffiliation> ?affiliation } "
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
@@ -140,7 +140,7 @@ public class LinkedDataDocumentServiceSailTest {
 
         String queryString = "SELECT * WHERE { "
                 + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-                + "?subj <https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf> ?publication ."
+                + "?subj <https://dblp.org/rdf/schema-2020-07-01#authorOf> ?publication ."
                 + "?subj <urn:p> <urn:o> ." 
                 + "?subj <urn:p2> <urn:o2> ." 
                 + "}";
