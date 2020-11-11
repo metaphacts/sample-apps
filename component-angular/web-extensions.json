@@ -1,0 +1,12 @@
+{
+  "components": {
+    "hello-world-angular": {
+      "loadScripts": [
+        "/assets/hello-world-angular.js"
+      ],
+      "loadStyles": [
+        "/assets/styles-angular.css"
+      ]
+    }
+  }
+}
