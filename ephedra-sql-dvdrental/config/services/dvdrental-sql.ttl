@@ -1,0 +1,94 @@
+PREFIX sp: <http://spinrdf.org/sp#>
+PREFIX spin: <http://spinrdf.org/spin#>
+PREFIX spl: <http://spinrdf.org/spl#>
+PREFIX : <http://www.metaphacts.com/ontologies/platform/service/custom#>
+PREFIX mpsqlsail: <http://www.metaphacts.com/ontologies/sql#> 
+PREFIX ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#>
+PREFIX example: <http://www.example.org/>
+
+ephedra:dvdrental-sql a ephedra:Service ;
+	<http://www.openrdf.org/config/sail#sailType> "metaphacts:SQL" ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "A wrapper for the dvdrental postgres db" ;
+	ephedra:hasSPARQLPattern (
+	    [
+			sp:subject :_results ;
+			sp:predicate mpsqlsail:hasQueryId ;
+			sp:object :_queryId
+		]
+		[
+			sp:subject :_results ;
+			sp:predicate example:hasCategory ;
+			sp:object :_categoryInput
+		]
+		[
+			sp:subject :_results ;
+			sp:predicate example:hasTitle;
+			sp:object :_title
+		]
+    [
+			sp:subject :_results ;
+			sp:predicate example:hasDescription;
+			sp:object :_description
+		]
+    [
+			sp:subject :_results ;
+			sp:predicate example:hasYear;
+			sp:object :_year
+		]
+	) ;
+	spin:constraint
+	[
+		a spl:Argument ;
+		rdfs:comment "query ID (mandatory parameter)" ;
+		spl:predicate :_queryId ;
+		spl:valueType xsd:string
+    ] ;
+    spin:constraint
+	[
+		a spl:Argument ;
+		rdfs:comment "input parameter" ;
+		spl:predicate :_categoryInput ;
+		spl:defaultValue "Action" ;
+		spl:valueType xsd:string
+    ] ;
+	spin:column
+	[
+		a spin:Column ;
+		rdfs:comment "Blank node for results holder (mandatory)" ;
+		spl:predicate :_results ;
+		spl:valueType rdfs:Resource
+	] ;
+	spin:column
+	[
+		a spin:Column ;
+		rdfs:comment "Title" ;
+		spl:predicate :_title ;
+		spl:valueType xsd:string
+	] ;
+	spin:column
+	[
+		a spin:Column ;
+		rdfs:comment "Description" ;
+		spl:predicate :_description ;
+		spl:valueType xsd:string
+	] ;
+	spin:column
+	[
+		a spin:Column ;
+		rdfs:comment "Year" ;
+		spl:predicate :_year ;
+		spl:valueType xsd:string
+	] ;
+	mpsqlsail:includesSQLQuery 
+	[
+		mpsqlsail:hasQueryId "q1" ;
+		mpsqlsail:text """SELECT
+   film.title,
+   film.description,
+   film.release_year AS year,
+   category.name AS category
+FROM
+   film, film_category, category
+WHERE film_category.film_id=film.film_id AND film_category.category_id=category.category_id AND category.name IN (?categoryInput)  
+ORDER BY film.release_year DESC;""" ;
+	] .

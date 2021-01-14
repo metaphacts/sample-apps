@@ -1,0 +1,33 @@
+<ol class="page-breadcrumb">
+    <li class="active">
+        Demo
+    </li>
+</ol>
+
+<div class="page">
+  <div class='page__body'>
+    <h2>Demo page</h2>
+  
+    <p><b>Dvd Rental Demo</b>
+    
+    <p>The following table shows action films from the dvd rental database ordered by year.</p>
+        
+    <semantic-table 
+      query="
+          PREFIX mpsqlsail: <http://www.metaphacts.com/ontologies/sql#> 
+          PREFIX example: <http://www.example.org/> 
+          SELECT ?title ?description ?year WHERE {
+             BIND ('Action' AS ?category) .
+             SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#dvdrental-sql> {
+              ?result mpsqlsail:hasQueryId 'q1' .
+              ?result example:hasCategory ?category .
+              ?result example:hasTitle ?title .
+              ?result example:hasDescription ?description .
+              ?result example:hasYear ?year .
+             }
+          }"
+     ></semantic-table>
+
+ 
+  </div>
+</div>

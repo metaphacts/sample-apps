@@ -1,0 +1,25 @@
+@prefix mph: <http://www.metaphacts.com/ontologies/platform/repository#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
+
+[] a rep:Repository;
+  rep:repositoryID "dvdrental-sql";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          ephedra:implementsService ephedra:dvdrental-sql ;
+          ephedra:serviceURL "jdbc:postgresql://localhost:5432/dvdrental" ;
+          mph:password "${repository.dvdrental.password:postgres}";
+          mph:username "${repository.dvdrental.username:postgres}";
+          <http://www.metaphacts.com/ontologies/sql#hasConnectionProperty> [
+              <http://www.metaphacts.com/ontologies/sql#name> "connectTimeout";
+              <http://www.metaphacts.com/ontologies/sql#value> "2000"
+            ];
+          sail:sailType "metaphacts:SQL"
+        ]
+    ];
+  rdfs:label "A wrapper for the SQL test repository." .

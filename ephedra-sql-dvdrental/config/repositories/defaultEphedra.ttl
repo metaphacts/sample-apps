@@ -1,0 +1,21 @@
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a rep:Repository;
+  rep:repositoryID "defaultEphedra";
+  rep:repositoryImpl [
+      ephedra:defaultMember "proxyToDefault";
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "lookup";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/repository#lookup>
+        ];
+      ephedra:serviceMember [
+          ephedra:delegateRepositoryID "dvdrental-sql";
+          ephedra:serviceReference <http://www.metaphacts.com/ontologies/platform/repository/federation#dvdrental-sql>
+        ];
+      ephedra:writable true;
+      rep:repositoryType "metaphacts:EphedraRepository"
+    ];
+  rdfs:label "Ephedra federation" .
