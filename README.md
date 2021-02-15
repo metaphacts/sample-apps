@@ -26,7 +26,7 @@ e.g. in `gradle.properties`.
 
 ### Pre-Requisites
 
-* JDK 1.8 installed on the local machine, JAVA-HOME pointing to the installation
+* JDK 11 installed on the local machine, JAVA-HOME pointing to the installation
 * Copy of a binary WAR distribution of a platform release on the local host
 * (Optionally) Eclipse as IDE
 
@@ -61,7 +61,7 @@ __Note__: when updating the platform version it is required to re-run `gradlew p
 ./gradlew prepareEnvironment
 ./gradlew appRun
 ./gradlew -Ddebug=true appRun
-./gradlew cleanEclipse eclipse
+./gradlew cleanRuntimeDir
 ```
 
 Available settings:

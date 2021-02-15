@@ -1,7 +1,7 @@
 /*
  * Platform SDK definiton
  *
- * (c) 2020 metaphacts GmbH
+ * (c) 2021 metaphacts GmbH
  *
  * This script is assumed to be included into the root project
  */
@@ -156,6 +156,10 @@ configure(project(':jetty')) {
 	}
 	clean.dependsOn cleanJetty
 	
+	
+	task cleanRuntimeDir(type: Delete) {
+		delete runtimeDir;
+	}
 	
 	task prepareRuntime() {
 		doLast {

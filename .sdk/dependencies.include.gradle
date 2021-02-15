@@ -1,10 +1,13 @@
 project.ext {
-	RDF4J_VERSION = '3.4.1'
-	JERSEY_VERSION = "2.22.2"
+	RDF4J_VERSION = "3.5.0"
+	JERSEY_VERSION = "2.33"
+	SHIRO_VERSION = "1.7.0"
+	JACKSON_VERSION = "2.11.4"
+	GUAVA_VERSION = "30.1-jre"
+	LOG4J_VERSION = "2.13.3"
 }
-
 dependencies {
-	
+
 	// provided dependencies by metaphactory
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-api', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-binary', version: RDF4J_VERSION, transitive: false
@@ -20,6 +23,8 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-languages', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-datatypes', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-model', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-model-api', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-model-vocabulary', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-api', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-query', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-model', version: RDF4J_VERSION, transitive: false
@@ -47,26 +52,28 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-federation', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryrender', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-evaluation', version: RDF4J_VERSION, transitive: false
-	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25', transitive: false
-	compileOnly group: 'com.google.guava', name: 'guava', version: '28.2-jre', transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12', transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.13', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1', transitive: false
-	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1', transitive: false
-	compileOnly group: 'org.pf4j', name: 'pf4j', version: '3.2.0'
+	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29', transitive: false
+	compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: LOG4J_VERSION, transitive: false
+	compileOnly group: 'com.google.guava', name: 'guava', version: GUAVA_VERSION, transitive: false
+	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13', transitive: false
+	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14', transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: JACKSON_VERSION, transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: JACKSON_VERSION, transitive: false
+	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: JACKSON_VERSION, transitive: false
+	compileOnly group: 'org.pf4j', name: 'pf4j', version: '3.5.0'
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-server', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-client', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-common', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.media', name: 'jersey-media-jaxb', version: JERSEY_VERSION
-	
+
 	// security
-	compileOnly group: 'org.apache.shiro', name: 'shiro-core', version: '1.6.0'
-	compileOnly group: 'org.apache.shiro', name: 'shiro-web', version: '1.6.0'
-	
-	
+	compileOnly group: 'org.apache.shiro', name: 'shiro-core', version: SHIRO_VERSION
+	compileOnly group: 'org.apache.shiro', name: 'shiro-web', version: SHIRO_VERSION
+
+
 	testRuntime group: 'commons-io', name: 'commons-io', version: '2.6', transitive: false
 	testRuntime group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
-	
-	testCompile 'junit:junit:4.12'
+
+	testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+	testImplementation group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'
 }

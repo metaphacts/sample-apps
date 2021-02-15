@@ -28,8 +28,8 @@ configure(appProjects) {
 	apply plugin: 'java-library'
 	apply plugin: 'eclipse'
 	
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+	sourceCompatibility = 11
+	targetCompatibility = 11
 	
 	apply from: rootProject.file('.sdk/app.sdk.gradle')
 	apply from: rootProject.file('.sdk/dependencies.include.gradle')
