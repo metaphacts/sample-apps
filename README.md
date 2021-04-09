@@ -94,5 +94,4 @@ The following list contains a few compiled Ephedra tutorials.
 
 * Using the REST service wrapper to query geospatial data from OpenStreetMap and combine it with structural information from the Wikidata knowledge graph. Example using Mona Lisa data. [[tutorial](tutorials/monalisa/monalisa.md)], [[app](ephedra-mona-lisa/)]
 * Using the SQL service wrapper to access movie data from a Postgres service. [[app](ephedra-sql-dvdrental/)]
-* Custom service wrapper for a Weather API [[tutorial](tutorials/weather/weather.md)], [[app](ephedra-custom-weatherApi/)]
 * Custom service wrapper for querying Linked Data Documents [[tutorial](tutorials/dblp/dblp.md)], [[app](ephedra-custom-linkedDataDocuments/)]

@@ -1,5 +1,7 @@
 # Tutorial: Querying a weather API for a given location
 
+**Deprecated**: this tutorial is deprecated as DarkSky has discontinued their public Weather API service. The tutorial is kept for documentation purposes only.
+
 In this tutorial we use the geo-coordinates of a location to obtain a weather forecast. As a use-case we query the geo-coordinates from the Wikidata knowledge graph, and display the three day forecast for the corresponding location.
 
 See the [app project](../../ephedra-custom-weatherApi/) for further details and deployment steps of the required base app.
