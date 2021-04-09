@@ -67,7 +67,6 @@ if (webappDir.exists()) {
 			}
 
 			dependencies {
-				compileOnly name: 'platform-client-api'
 				compileOnly name: 'metaphacts-platform'
 			}
 		}
