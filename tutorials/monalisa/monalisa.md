@@ -316,7 +316,7 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
 PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-SELECT ?label ?wkt ?label WHERE { 
+SELECT ?label ?wkt WHERE { 
   SERVICE <https://wikidata.metaphacts.com/sparql> { 
     wd:Q12418 wdt:P276/wdt:P361* ?museum . 
     ?museum wdt:P131 ?geolocation . 
