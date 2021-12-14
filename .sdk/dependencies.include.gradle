@@ -1,10 +1,10 @@
 project.ext {
-	RDF4J_VERSION = "3.7.2"
-	JERSEY_VERSION = "2.33"
-	SHIRO_VERSION = "1.7.1"
-	JACKSON_VERSION = "2.12.4"
-	GUAVA_VERSION = "30.1.1-jre"
-	LOG4J_VERSION = "2.13.3"
+	RDF4J_VERSION = "3.7.4"
+	JERSEY_VERSION = "2.34"
+	SHIRO_VERSION = "1.8.0"
+	JACKSON_VERSION = "2.13.0"
+	GUAVA_VERSION = "31.0.1-jre"
+	LOG4J_VERSION = "2.16.0"
 }
 dependencies {
 
@@ -52,7 +52,7 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-federation', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryrender', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-evaluation', version: RDF4J_VERSION, transitive: false
-	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30', transitive: false
+	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32', transitive: false
 	compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: LOG4J_VERSION, transitive: false
 	compileOnly group: 'com.google.guava', name: 'guava', version: GUAVA_VERSION, transitive: false
 	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13', transitive: false
@@ -71,8 +71,10 @@ dependencies {
 	compileOnly group: 'org.apache.shiro', name: 'shiro-web', version: SHIRO_VERSION
 
 
-	testRuntime group: 'commons-io', name: 'commons-io', version: '2.10.0', transitive: false
-	testRuntime group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
+	runtimeOnly group: 'commons-io', name: 'commons-io', version: '2.11.0', transitive: false
+	runtimeOnly group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
+	runtimeOnly "jakarta.xml.bind:jakarta.xml.bind-api:2.3.3"
+	runtimeOnly "org.glassfish.jaxb:jaxb-runtime:2.3.3"
 
 	testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 	testImplementation group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'

@@ -90,8 +90,15 @@ configure(project(':jetty')) {
 
 	}
 	
+	ext {
+		JETTY_VERSION = '9.4.44.v20210927'
+	}
+	
 	dependencies {
-		//
+		// make dependencies available for source code resolution when debugging Jetty code in the IDE
+		// this code is not used for compilation or other access
+		runtimeOnly group: 'org.eclipse.jetty', name: 'jetty-server', version: JETTY_VERSION
+		runtimeOnly group: 'org.eclipse.jetty', name: 'jetty-servlet', version: JETTY_VERSION
 	}
 	
 	buildDir = rootProject.file('target/jetty/')
@@ -102,6 +109,7 @@ configure(project(':jetty')) {
 		loggingLevel='INFO'
 		contextPath=''
 		httpPort=10214
+		jetty94Version = JETTY_VERSION
 		
 		jvmArgs = []
 		
