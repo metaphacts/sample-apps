@@ -16,7 +16,7 @@
     <semantic-context repository='ephedra-demo'>
       <semantic-table 
    	 query="
-        PREFIX dblp: <https://dblp.org/rdf/schema-2020-07-01#>
+        PREFIX dblp: <https://dblp.org/rdf/schema#>
         SELECT ?title ?year ?conference WHERE {
           BIND (<https://dblp.org/pid/h/PeterHaase1.rdf> AS ?ldDocument) .
           SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#linked-data> {

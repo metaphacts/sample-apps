@@ -1,7 +1,5 @@
 package com.metaphacts.sail.ld;
 
-import java.io.File;
-
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -33,7 +31,7 @@ public class LinkedDataDocumentServiceSailTest {
 
             String queryString = "SELECT ?subj ?publication WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#authorOf> ?publication ." 
+                    + "?subj <https://dblp.org/rdf/schema#authorOf> ?publication ." 
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
@@ -49,15 +47,6 @@ public class LinkedDataDocumentServiceSailTest {
     @Test
     public void testWithContentNegotiation2() throws Exception {
 
-        /*
-         * Note: rdf/xml document uses different namespace
-         * 
-         * https://dblp.org/rdf/schema-2017-04-18#authorOf
-         * 
-         * vs
-         * 
-         * https://dblp.uni-trier.de/rdf/schema-2017-04-18#authorOf
-         */
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
         repo.setDataDir(tempFolder.newFolder("dataDir"));
         repo.init();
@@ -65,7 +54,7 @@ public class LinkedDataDocumentServiceSailTest {
         try (RepositoryConnection conn = repo.getConnection()) {
 
             String queryString = "SELECT ?publication WHERE { "
-                    + "<https://dblp.org/pers/h/Haase_0001:Peter> <https://dblp.org/rdf/schema-2017-04-18#authorOf> ?publication ."
+                    + "<https://dblp.org/pid/h/PeterHaase1> <https://dblp.org/rdf/schema#authorOf> ?publication ."
                     + "?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true ." 
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
@@ -90,10 +79,10 @@ public class LinkedDataDocumentServiceSailTest {
 
             String queryString = "SELECT ?subj ?publication ?title WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.uni-trier.de/pers/tr/h/Haase_0001:Peter.nt> ."
-                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2020-07-01#authorOf> . "
+                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema#authorOf> . "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true ."
-                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#authorOf> ?publication . "
-                    + "?publication <https://dblp.org/rdf/schema-2020-07-01#title> ?title" 
+                    + "?subj <https://dblp.org/rdf/schema#authorOf> ?publication . "
+                    + "?publication <https://dblp.org/rdf/schema#title> ?title" 
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
@@ -110,19 +99,19 @@ public class LinkedDataDocumentServiceSailTest {
     public void testFollowPredicate2() throws Exception {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
-//		repo.setDataDir(tempFolder.newFolder("dataDir"));
-        repo.setDataDir(new File("tmp/cache"));
+        repo.setDataDir(tempFolder.newFolder("dataDir"));
+//        repo.setDataDir(new File("tmp/cache"));
         repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
 
             String queryString = "SELECT ?subj ?coAuthor ?name ?affiliation WHERE { "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#document> <https://dblp.org/pid/h/PeterHaase1.rdf> ."
-                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema-2020-07-01#coCreatorWith> . "
+                    + "?subj <http://www.metaphacts.com/ontologies/ld#follow> <https://dblp.org/rdf/schema#coCreatorWith> . "
                     + "?subj <http://www.metaphacts.com/ontologies/ld#followSilent> true . "
-                    + "?subj <https://dblp.org/rdf/schema-2020-07-01#coCreatorWith> ?coAuthor . "
-                    + "?coAuthor <https://dblp.org/rdf/schema-2020-07-01#primaryFullCreatorName> ?name ."
-                    + "OPTIONAL { ?coAuthor <https://dblp.org/rdf/schema-2020-07-01#primaryAffiliation> ?affiliation } "
+                    + "?subj <https://dblp.org/rdf/schema#coCreatorWith> ?coAuthor . "
+                    + "?coAuthor <https://dblp.org/rdf/schema#primaryFullCreatorName> ?name ."
+                    + "OPTIONAL { ?coAuthor <https://dblp.org/rdf/schema#primaryAffiliation> ?affiliation } "
                     + "}";
             TupleQuery tq = conn.prepareTupleQuery(queryString);
             try (TupleQueryResult tqRes = tq.evaluate()) {
