@@ -4,7 +4,7 @@ project.ext {
 	SHIRO_VERSION = "1.8.0"
 	JACKSON_VERSION = "2.13.0"
 	GUAVA_VERSION = "31.0.1-jre"
-	LOG4J_VERSION = "2.16.0"
+	LOG4J_VERSION = "2.17.1"
 }
 dependencies {
 

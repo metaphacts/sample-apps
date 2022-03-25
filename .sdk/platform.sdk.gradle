@@ -91,7 +91,7 @@ configure(project(':jetty')) {
 	}
 	
 	ext {
-		JETTY_VERSION = '9.4.44.v20210927'
+		JETTY_VERSION = '9.4.45.v20220203'
 	}
 	
 	dependencies {
