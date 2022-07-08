@@ -1,8 +1,8 @@
 project.ext {
-	RDF4J_VERSION = "3.7.4"
+	RDF4J_VERSION = "4.0.3"
 	JERSEY_VERSION = "2.34"
-	SHIRO_VERSION = "1.8.0"
-	JACKSON_VERSION = "2.13.0"
+	SHIRO_VERSION = "1.9.1"
+	JACKSON_VERSION = "2.13.2"
 	GUAVA_VERSION = "31.0.1-jre"
 	LOG4J_VERSION = "2.17.1"
 }
@@ -35,7 +35,13 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryresultio-text', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryresultio-binary', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryresultio-sparqlxml', version: RDF4J_VERSION, transitive: false
-	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-util', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-exception', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-io', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-transaction', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-iterator', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-util', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-text', version: RDF4J_VERSION, transitive: false
+	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-common-xml', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-http-client', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-http-protocol', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-manager', version: RDF4J_VERSION, transitive: false
@@ -49,7 +55,6 @@ dependencies {
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-inferencer', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-nativerdf', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-memory', version: RDF4J_VERSION, transitive: false
-	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-sail-federation', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryrender', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.eclipse.rdf4j', name: 'rdf4j-queryalgebra-evaluation', version: RDF4J_VERSION, transitive: false
 	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32', transitive: false
@@ -71,10 +76,10 @@ dependencies {
 	compileOnly group: 'org.apache.shiro', name: 'shiro-web', version: SHIRO_VERSION
 
 
-	runtimeOnly group: 'commons-io', name: 'commons-io', version: '2.11.0', transitive: false
-	runtimeOnly group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
-	runtimeOnly "jakarta.xml.bind:jakarta.xml.bind-api:2.3.3"
-	runtimeOnly "org.glassfish.jaxb:jaxb-runtime:2.3.3"
+	compileOnly group: 'commons-io', name: 'commons-io', version: '2.11.0', transitive: false
+	compileOnly group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
+	compileOnly "jakarta.xml.bind:jakarta.xml.bind-api:2.3.3"
+	compileOnly "org.glassfish.jaxb:jaxb-runtime:2.3.3"
 
 	testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 	testImplementation group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'

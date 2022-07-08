@@ -1,7 +1,7 @@
 /*
  * Platform SDK definiton
  *
- * (c) 2021 metaphacts GmbH
+ * (c) 2022 metaphacts GmbH
  *
  * This script is assumed to be included into the root project
  */
@@ -91,7 +91,7 @@ configure(project(':jetty')) {
 	}
 	
 	ext {
-		JETTY_VERSION = '9.4.45.v20220203'
+		JETTY_VERSION = '9.4.46.v20220331'
 	}
 	
 	dependencies {

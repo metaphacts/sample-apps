@@ -88,7 +88,7 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
 
         MemoryStore store = new MemoryStore();
         try {
-            store.initialize();
+            store.init();
             try (SailConnection conn = store.getConnection()) {
                 conn.begin();
                 model.stream().forEach(st -> conn.addStatement(st.getSubject(), st.getPredicate(), st.getObject()));
