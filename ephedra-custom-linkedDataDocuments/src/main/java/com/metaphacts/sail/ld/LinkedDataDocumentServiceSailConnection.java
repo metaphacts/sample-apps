@@ -255,6 +255,9 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
                 if (ldDocumentUrl != null) {
                     throw new SailException("LD document URL is already defined, cannot redefine.");
                 }
+                if (!node.getObjectVar().hasValue()) {
+                    throw new SailException("Missing LD document URL");
+                }
                 Value v = node.getObjectVar().getValue();
                 ldDocumentUrl = v.stringValue();
                 if (!node.getSubjectVar().hasValue()) {
