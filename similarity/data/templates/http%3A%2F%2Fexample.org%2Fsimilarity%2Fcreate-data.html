@@ -1,0 +1,309 @@
+<template-fragment
+  export
+  id="create-data"
+>
+  <semantic-if
+    query='ASK { GRAPH <file:///nobel-prize-dataset.trig> {?s ?p ?o.}}'
+    then='{{> check-for-extension}}'
+    else='{{> load-nobel-prize-data}}'
+  >
+    <template id='load-nobel-prize-data'>
+      <semantic-update 
+        post-action='reload'
+        query='LOAD <https://metaphacts-datasets.s3.amazonaws.com/nobel-prize-bundle.trig.gz>'
+      >
+        <button class="btn btn-secondary">Load Nobel Prize Data Bundle</button>
+      </semantic-update>
+    </template>
+  
+      <template id='check-for-extension'>
+        <semantic-if
+          query='ASK { GRAPH <http://example.org/similarity/resources/> {?s ?p ?o.}}'
+          then='{{> check-for-labels}}'
+          else='{{> load-base-data}}'
+        >
+          <template id='load-base-data'>
+        <semantic-update
+          post-action='reload'
+          variable-params='["person", "wikidataEntity", "predicate", "object", "objectLabel", "subjectLabel"]'
+          query='
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+            PREFIX similarity: <http://example.org/similarity/>
+            INSERT {
+              GRAPH <http://example.org/similarity/resources/> {
+                  ?wikidataEntity ?predicate ?object.
+                  ?object rdfs:label ?objectLabel.
+                  ?wikidataEntity rdfs:label ?subjectLabel.
+                  ?wikidataEntity rdf:type similarity:Person.
+                }
+              } WHERE {
+                ?person a foaf:Person, <http://data.nobelprize.org/terms/Laureate>.
+                ?person owl:sameAs ?wikidataEntity.
+                FILTER (!isBlank(?wikidataEntity))
+                
+                SERVICE <https://query.wikidata.org/sparql> {
+                  SELECT ?predicate ?subjectLabel ?object ?objectLabel  WHERE {
+                    ?wikidataEntity ?predicate ?object.
+                    ?object rdfs:label ?objectLabel.
+                    ?wikidataEntity rdfs:label ?subjectLabel.
+                    FILTER (lang(?objectLabel) = "en")
+                    FILTER (lang(?subjectLabel) = "en")
+                  }
+                }
+              }
+          '
+        >
+          <button class='btn btn-secondary'>Augment Dataset</button>
+        </semantic-update>
+      </template>
+
+    <!-- Checking for labels -->
+    <template id='check-for-labels'>
+      <semantic-if
+        query='ASK { <http://www.wikidata.org/prop/direct/P800> rdfs:label ?label.}'
+        then='{{> data-loaded}}'
+        else='{{> create-labels}}'
+      >
+        <!-- All Data loaded -->
+        <template id='data-loaded'>All required data loaded.</template>
+
+        <!-- We need to load augmentation data -->
+        <template id='create-labels'>
+          <semantic-update
+            variable-params='["directProp", "predicateLabel", "wikidataProp", "propID"]'
+            post-action='reload'
+            query='
+              PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+              PREFIX wd: <http://www.wikidata.org/entity/>
+              PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+                INSERT {
+                  GRAPH <http://example.org/similarity/resources/> {
+                  ?directProp rdfs:label ?predicateLabel.
+                  }
+                } WHERE {
+                  VALUES (?wikidataProp) {
+(<http://www.wikidata.org/entity/P31>)
+(<http://www.wikidata.org/entity/P27>)
+(<http://www.wikidata.org/entity/P5008>)
+(<http://www.wikidata.org/entity/P937>)
+(<http://www.wikidata.org/entity/P1321>)
+(<http://www.wikidata.org/entity/P3373>)
+(<http://www.wikidata.org/entity/P5021>)
+(<http://www.wikidata.org/entity/P800>)
+(<http://www.wikidata.org/entity/P737>)
+(<http://www.wikidata.org/entity/P108>)
+(<http://www.wikidata.org/entity/P551>)
+(<http://www.wikidata.org/entity/P5125>)
+(<http://www.wikidata.org/entity/P172>)
+(<http://www.wikidata.org/entity/P184>)
+(<http://www.wikidata.org/entity/P1412>)
+(<http://www.wikidata.org/entity/P166>)
+(<http://www.wikidata.org/entity/P1411>)
+(<http://www.wikidata.org/entity/P1038>)
+(<http://www.wikidata.org/entity/P6886>)
+(<http://www.wikidata.org/entity/P103>)
+(<http://www.wikidata.org/entity/P19>)
+(<http://www.wikidata.org/entity/P69>)
+(<http://www.wikidata.org/entity/P101>)
+(<http://www.wikidata.org/entity/P910>)
+(<http://www.wikidata.org/entity/P1424>)
+(<http://www.wikidata.org/entity/P803>)
+(<http://www.wikidata.org/entity/P8852>)
+(<http://www.wikidata.org/entity/P26>)
+(<http://www.wikidata.org/entity/P22>)
+(<http://www.wikidata.org/entity/P102>)
+(<http://www.wikidata.org/entity/P1196>)
+(<http://www.wikidata.org/entity/P106>)
+(<http://www.wikidata.org/entity/P1066>)
+(<http://www.wikidata.org/entity/P39>)
+(<http://www.wikidata.org/entity/P463>)
+(<http://www.wikidata.org/entity/P40>)
+(<http://www.wikidata.org/entity/P20>)
+(<http://www.wikidata.org/entity/P1441>)
+(<http://www.wikidata.org/entity/P1344>)
+(<http://www.wikidata.org/entity/P735>)
+(<http://www.wikidata.org/entity/P802>)
+(<http://www.wikidata.org/entity/P25>)
+(<http://www.wikidata.org/entity/P21>)
+(<http://www.wikidata.org/entity/P140>)
+(<http://www.wikidata.org/entity/P485>)
+(<http://www.wikidata.org/entity/P734>)
+(<http://www.wikidata.org/entity/P512>)
+(<http://www.wikidata.org/entity/P1343>)
+(<http://www.wikidata.org/entity/P119>)
+(<http://www.wikidata.org/entity/P509>)
+(<http://www.wikidata.org/entity/P185>)
+(<http://www.wikidata.org/entity/P2650>)
+(<http://www.wikidata.org/entity/P1889>)
+(<http://www.wikidata.org/entity/P1050>)
+(<http://www.wikidata.org/entity/P2348>)
+(<http://www.wikidata.org/entity/P2632>)
+(<http://www.wikidata.org/entity/P793>)
+(<http://www.wikidata.org/entity/P136>)
+(<http://www.wikidata.org/entity/P2652>)
+(<http://www.wikidata.org/entity/P135>)
+(<http://www.wikidata.org/entity/P6379>)
+(<http://www.wikidata.org/entity/P7763>)
+(<http://www.wikidata.org/entity/P10527>)
+(<http://www.wikidata.org/entity/P97>)
+(<http://www.wikidata.org/entity/P112>)
+(<http://www.wikidata.org/entity/P1142>)
+(<http://www.wikidata.org/entity/P3602>)
+(<http://www.wikidata.org/entity/P361>)
+(<http://www.wikidata.org/entity/P1429>)
+(<http://www.wikidata.org/entity/P3448>)
+(<http://www.wikidata.org/entity/P552>)
+(<http://www.wikidata.org/entity/P1853>)
+(<http://www.wikidata.org/entity/P607>)
+(<http://www.wikidata.org/entity/P1151>)
+(<http://www.wikidata.org/entity/P1340>)
+(<http://www.wikidata.org/entity/P1830>)
+(<http://www.wikidata.org/entity/P410>)
+(<http://www.wikidata.org/entity/P553>)
+(<http://www.wikidata.org/entity/P1299>)
+(<http://www.wikidata.org/entity/P53>)
+(<http://www.wikidata.org/entity/P9493>)
+(<http://www.wikidata.org/entity/P1576>)
+(<http://www.wikidata.org/entity/P241>)
+(<http://www.wikidata.org/entity/P66>)
+(<http://www.wikidata.org/entity/P511>)
+(<http://www.wikidata.org/entity/P264>)
+(<http://www.wikidata.org/entity/P1303>)
+(<http://www.wikidata.org/entity/P1026>)
+(<http://www.wikidata.org/entity/P157>)
+(<http://www.wikidata.org/entity/P1399>)
+(<http://www.wikidata.org/entity/P2868>)
+(<http://www.wikidata.org/entity/P1416>)
+(<http://www.wikidata.org/entity/P5056>)
+(<http://www.wikidata.org/entity/P1950>)
+(<http://www.wikidata.org/entity/P1035>)
+(<http://www.wikidata.org/entity/P9600>)
+(<http://www.wikidata.org/entity/P1598>)
+(<http://www.wikidata.org/entity/P611>)
+(<http://www.wikidata.org/entity/P3342>)
+(<http://www.wikidata.org/entity/P6104>)
+(<http://www.wikidata.org/entity/P1327>)
+(<http://www.wikidata.org/entity/P6275>)
+(<http://www.wikidata.org/entity/P7084>)
+(<http://www.wikidata.org/entity/P8625>)
+(<http://www.wikidata.org/entity/P740>)
+(<http://www.wikidata.org/entity/P1455>)
+(<http://www.wikidata.org/entity/P358>)
+(<http://www.wikidata.org/entity/P412>)
+(<http://www.wikidata.org/entity/P451>)
+(<http://www.wikidata.org/entity/P941>)
+(<http://www.wikidata.org/entity/P1283>)
+(<http://www.wikidata.org/entity/P6978>)
+(<http://www.wikidata.org/entity/P6872>)
+(<http://www.wikidata.org/entity/P54>)
+(<http://www.wikidata.org/entity/P945>)
+(<http://www.wikidata.org/entity/P5800>)
+(<http://www.wikidata.org/entity/P3919>)
+(<http://www.wikidata.org/entity/P598>)
+(<http://www.wikidata.org/entity/P1532>)
+(<http://www.wikidata.org/entity/P3828>)
+(<http://www.wikidata.org/entity/P1875>)
+(<http://www.wikidata.org/entity/P9419>)
+(<http://www.wikidata.org/entity/P138>)
+(<http://www.wikidata.org/entity/P641>)
+(<http://www.wikidata.org/entity/P1552>)
+(<http://www.wikidata.org/entity/P8927>)
+(<http://www.wikidata.org/entity/P91>)
+(<http://www.wikidata.org/entity/P1596>)
+(<http://www.wikidata.org/entity/P1884>)
+(<http://www.wikidata.org/entity/P237>)
+(<http://www.wikidata.org/entity/P531>)
+(<http://www.wikidata.org/entity/P812>)
+(<http://www.wikidata.org/entity/P8500>)
+(<http://www.wikidata.org/entity/P413>)
+(<http://www.wikidata.org/entity/P7374>)
+(<http://www.wikidata.org/entity/P708>)
+(<http://www.wikidata.org/entity/P2354>)
+(<http://www.wikidata.org/entity/P495>)
+(<http://www.wikidata.org/entity/P407>)
+(<http://www.wikidata.org/entity/P50>)
+(<http://www.wikidata.org/entity/P1433>)
+(<http://www.wikidata.org/entity/P841>)
+(<http://www.wikidata.org/entity/P411>)
+(<http://www.wikidata.org/entity/P7779>)
+(<http://www.wikidata.org/entity/P9139>)
+(<http://www.wikidata.org/entity/P159>)
+(<http://www.wikidata.org/entity/P488>)
+(<http://www.wikidata.org/entity/P921>)
+(<http://www.wikidata.org/entity/P17>)
+(<http://www.wikidata.org/entity/P131>)
+(<http://www.wikidata.org/entity/P37>)
+(<http://www.wikidata.org/entity/P2184>)
+(<http://www.wikidata.org/entity/P4195>)
+(<http://www.wikidata.org/entity/P2541>)
+(<http://www.wikidata.org/entity/P3975>)
+(<http://www.wikidata.org/entity/P355>)
+(<http://www.wikidata.org/entity/P2388>)
+(<http://www.wikidata.org/entity/P452>)
+(<http://www.wikidata.org/entity/P1037>)
+(<http://www.wikidata.org/entity/P276>)
+(<http://www.wikidata.org/entity/P749>)
+(<http://www.wikidata.org/entity/P527>)
+(<http://www.wikidata.org/entity/P8786>)
+(<http://www.wikidata.org/entity/P1687>)
+(<http://www.wikidata.org/entity/P1454>)
+(<http://www.wikidata.org/entity/P8402>)
+(<http://www.wikidata.org/entity/P3320>)
+(<http://www.wikidata.org/entity/P530>)
+(<http://www.wikidata.org/entity/P163>)
+(<http://www.wikidata.org/entity/P1365>)
+(<http://www.wikidata.org/entity/P457>)
+(<http://www.wikidata.org/entity/P1269>)
+(<http://www.wikidata.org/entity/P1056>)
+(<http://www.wikidata.org/entity/P169>)
+(<http://www.wikidata.org/entity/P5004>)
+(<http://www.wikidata.org/entity/P30>)
+(<http://www.wikidata.org/entity/P47>)
+(<http://www.wikidata.org/entity/P36>)
+(<http://www.wikidata.org/entity/P1313>)
+(<http://www.wikidata.org/entity/P150>)
+(<http://www.wikidata.org/entity/P1546>)
+(<http://www.wikidata.org/entity/P1622>)
+(<http://www.wikidata.org/entity/P8744>)
+(<http://www.wikidata.org/entity/P2633>)
+(<http://www.wikidata.org/entity/P2852>)
+(<http://www.wikidata.org/entity/P9241>)
+(<http://www.wikidata.org/entity/P7867>)
+(<http://www.wikidata.org/entity/P6364>)
+(<http://www.wikidata.org/entity/P10624>)
+(<http://www.wikidata.org/entity/P10280>)
+(<http://www.wikidata.org/entity/P421>)
+(<http://www.wikidata.org/entity/P279>)
+(<http://www.wikidata.org/entity/P209>)
+(<http://www.wikidata.org/entity/P38>)
+(<http://www.wikidata.org/entity/P194>)
+(<http://www.wikidata.org/entity/P208>)
+(<http://www.wikidata.org/entity/P85>)
+(<http://www.wikidata.org/entity/P155>)
+(<http://www.wikidata.org/entity/P78>)
+(<http://www.wikidata.org/entity/P832>)
+(<http://www.wikidata.org/entity/P92>)
+
+    }
+    SERVICE <https://query.wikidata.org/sparql> {
+    	SELECT ?wikidataProp ?predicateLabel ?directProp WHERE {
+  	    ?wikidataProp rdfs:label ?predicateLabel.
+	      BIND(STRAFTER(STR(?wikidataProp), STR(wd:)) AS ?propID)
+	      BIND(URI(CONCAT((STR(wdt:)),STR(?propID))) AS ?directProp)
+        FILTER (lang(?predicateLabel) = "en")     
+	    }
+    }  
+  }'
+          >
+            <button class='btn btn-secondary'>Create Labels</button>
+          </semantic-update>
+        </template>
+      </semantic-if>
+    </template>
+  </semantic-if>
+      </template>
+  </semantic-if>
+
+</template-fragment>
+

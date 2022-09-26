@@ -1,0 +1,3 @@
+similarity = http://example.org/similarity/
+wd = http://www.wikidata.org/entity/
+word2vec = http://www.metaphacts.com/ontologies/word2vec#

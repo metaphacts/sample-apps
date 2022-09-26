@@ -1,0 +1,267 @@
+<!-- Styles -->
+<style>
+  .modal-lg,
+  .modal-xl {
+    max-width: 1600px;
+  }
+</style>
+
+<!-- Breadcrumbs -->
+<ol class="page-breadcrumb">
+  <li>
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:Start"}}'>Start</semantic-link>
+  </li>
+  <li class="active">
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:ML-with-database"}}'>Cluster Pruning</semantic-link>
+  </li>
+</ol>
+
+<!-- Main -->
+<div class='page'>
+  <div class='page__body'>
+    {{> ::disclaimer}}
+   
+  </div>
+</div>
+
+<template-fragment id='disclaimer'>
+  <semantic-if query='ASK { GRAPH <tag:stardog:api:context:local> {?s ?p ?o.}}' then='{{> proceed}}'
+    else='{{> no-stardog-vendor}}'>
+    <template id='proceed'>
+      {{> ::introduction}}
+      {{> ::learn-model-root}}
+    </template>
+    <template id='no-stardog-vendor'>
+      <bs-alert variant="danger">
+        You are currently not using a Stardog database.
+      </bs-alert>
+    </template>
+  </semantic-if>
+</template-fragment>
+
+<template-fragment id='introduction'>
+  <h1> Cluster Pruning </h1>
+  <p>
+    In this example, we use Stardog and its similarity search functionality.
+    You can find more details <a href='https://www.stardog.com/blog/similarity-search/' target="_blank">here</a>.
+  </p>
+</template-fragment>
+
+
+<!-- Learn a simple Model  -->
+<template-fragment id='learn-model-root'>
+  <h2> Learning a Model </h2>
+  <p>
+    In order to obtain results, we first need to learn a model.
+  </p>
+  <!-- check if model exists -->
+  <semantic-if
+    query='
+    prefix spa: <tag:stardog:api:analytics:>
+    ASK {
+      similarity:myModel a spa:SimilarityModel
+    } '
+    then='{{> model-exists}}' 
+    else='{{> ::learn-model}}'
+  >
+    <template id='model-exists'>
+      <semantic-update post-action='reload' query='DROP GRAPH <tag:stardog:api:analytics:model>'
+       show-confirmation='true'>
+        <button class='btn btn-danger mb-2'>Drop Model</button>
+      </semantic-update>
+      <mp-collapsible-div expanded='false'>
+        <mp-collapsible-div-trigger>
+          Query 
+        </mp-collapsible-div-trigger>
+        <mp-collapsible-div-content>{{> ::learn-model onlyCode=true}}</mp-collapsible-div-content>
+      </mp-collapsible-div>
+      {{> ::predict-results}}
+    </template>
+  </semantic-if>
+</template-fragment>
+
+<!-- LEARNING A MODEL (onlyCode = true  will render the example as code )  -->
+<!--       
+        http://www.wikidata.org/prop/direct/P1411 -> nominated for
+        http://www.wikidata.org/prop/direct/P800 -> notable work
+        http://www.wikidata.org/prop/direct/P1066 -> student of
+        http://www.wikidata.org/prop/direct/P463 -> member of
+        http://www.wikidata.org/prop/direct/P106 -> occupation
+        http://www.wikidata.org/prop/direct/P108 -> employer
+        http://www.wikidata.org/prop/direct/P166 -> award received
+        http://www.wikidata.org/prop/direct/P69 -> educated at
+        http://www.wikidata.org/prop/direct/P19 -> place of birth
+-->
+<template-fragment id='learn-model'>
+  <mp-code-example show-code-by-default='{{#if onlyCode}}true {{else}}false{{/if}}'>
+    <semantic-context repository='proxyToDefault'>
+    <semantic-update post-action='reload'
+      variable-params='[
+        "nominatedWork", "notableWork", "studentOf", "memberOf",
+        "occupation", "employer", "awardReceived",
+        "educatedAt", "placeOfBirth", "nominatedFor",
+        "person", "nominatedWork_set", "notableWork_set",
+        "studentOf_set", "memberOf_set", "occupation_set",
+        "employer_set", "awardReceived_set", "educatedAt_set",
+        "placeOfBirth_set", "nominatedFor_set", "source", 
+        "influencedBy_set", "influencedBy"
+      ]'
+      query="
+        prefix spa: <tag:stardog:api:analytics:>
+        prefix similarity: <http://example.org/similarity/>
+        prefix wdp: <http://www.wikidata.org/prop/direct/>
+     
+        INSERT {
+          graph spa:model {
+            similarity:myModel a spa:SimilarityModel ;
+              spa:arguments (
+                ?nominatedWork_set
+                ?notableWork_set
+                ?studentOf_set 
+                ?memberOf_set
+                ?occupation_set
+                ?employer_set
+                ?awardReceived_set 
+                ?educatedAt_set
+                ?placeOfBirth_set     
+             
+              ) ;
+              spa:predict ?person .
+          }
+        }
+        WHERE { SELECT 
+          (spa:set(?nominatedWork) as ?nominatedWork_set)
+          (spa:set(?notableWork) as ?notableWork_set)
+          (spa:set(?studentOf) as ?studentOf_set)
+          (spa:set(?memberOf) as ?memberOf_set)
+          (spa:set(?occupation) as ?occupation_set)
+          (spa:set(?employer) as ?employer_set)
+          (spa:set(?awardReceived) as ?awardReceived_set) 
+          (spa:set(?educatedAt) as ?educatedAt_set)
+          (spa:set(?placeOfBirth) as ?placeOfBirth_set)
+         
+
+          ?person {
+            ?person a similarity:Person.                    
+            ?person wdp:P1411 ?nominatedWork.
+            ?person wdp:P800 ?notableWork .
+            ?person wdp:P1066 ?studentOf .
+            ?person wdp:P463 ?memberOf .
+            ?person wdp:P106 ?occupation .
+            ?person wdp:P108 ?employer .
+            ?person wdp:P166 ?awardReceived .
+            ?person wdp:P69 ?educatedAt .
+            ?person wdp:P19 ?placeOfBirth.
+        
+          } GROUP BY ?person
+        }" >
+        <button class='btn btn-primary'>Learn Model </button>
+      </semantic-update>
+    </semantic-context>
+  </mp-code-example>
+</template-fragment>
+
+<!-- Predict results  -->
+<template-fragment id='predict-results'>
+  <h2>Cluster Pruning</h2>
+  <p> 
+    In this example we want to find <code>10</code> similar persons to <code>Albert Einstein</code>. 
+  </p>
+  
+  <p>
+    Click on the <i class='fa fa-eye' aria-hidden='true'></i> icon for an explanation of the results.
+  </p>
+  <semantic-context repository='proxyToDefault'> 
+  <semantic-table 
+  options='{"showFilter": false}'
+    column-configuration='[
+      { 
+        "variableName":"target", "displayName":"Similar Laureate" 
+      },{
+        "variableName":"confidence",
+        "displayName":"Confidence", 
+        "cellTemplate": "<b>{{conf.value}}%</b> {{> explainTemplate}}" 
+      }
+    ]'   
+    no-result-template='Could not find a similar person'   
+    query="
+      prefix spa: <tag:stardog:api:analytics:>
+      prefix similarity: <http://example.org/similarity/>
+      prefix wdp: <http://www.wikidata.org/prop/direct/>
+      prefix foaf: <http://xmlns.com/foaf/0.1/>
+          
+      SELECT DISTINCT ?target ?source ?confidence (xsd:integer(?confidence*100) as ?conf)WHERE {
+             VALUES ?source {<http://www.wikidata.org/entity/Q937>}
+        graph spa:model {
+            similarity:myModel spa:arguments (
+              ?nominatedWork_set
+              ?notableWork_set
+              ?studentOf_set 
+              ?memberOf_set
+              ?occupation_set
+              ?employer_set
+              ?awardReceived_set 
+              ?educatedAt_set 
+              ?placeOfBirth_set 
+            ) ;
+            spa:confidence ?confidence;
+            spa:predict ?target.
+        }
+        { SELECT 
+            (spa:set(?nominatedWork) as ?nominatedWork_set) 
+            (spa:set(?notableWork) as ?notableWork_set)
+            (spa:set(?studentOf) as ?studentOf_set)
+            (spa:set(?memberOf) as ?memberOf_set)
+            (spa:set(?occupation) as ?occupation_set)
+            (spa:set(?employer) as ?employer_set)
+            (spa:set(?awardReceived) as ?awardReceived_set)
+            (spa:set(?educatedAt) as ?educatedAt_set)
+            
+           
+              { ?source a similarity:Person .
+                 ?source wdp:P1411 ?nominatedWork.
+                ?source wdp:P800 ?notableWork .
+                ?source wdp:P1066 ?studentOf .
+                ?source wdp:P463 ?memberOf .
+                ?source wdp:P106 ?occupation .
+                ?source wdp:P108 ?employer .
+                ?source wdp:P166 ?awardReceived .
+                ?source wdp:P69 ?educatedAt .        
+              } GROUP BY ?source
+          }
+      } 
+      ORDER BY DESC(?confidence) LIMIT 10
+    "
+    no-result-template="{{> no-res}}"   
+  >
+    <template id='explainTemplate'>
+       <mp-overlay-dialog title="Cluster Pruning" bs-size="large">
+        <!-- Trigger -->
+        <mp-overlay-dialog-trigger>
+          <button class='ml-4 btn btn-icon btn-secondary'>
+            <i class='fa fa-eye' aria-hidden='true'></i>
+          </button>
+        </mp-overlay-dialog-trigger>
+        <!-- Content -->
+        <mp-overlay-dialog-content> 
+          <p>
+            Comparing <b><mp-label iri='{{source.value}}'></mp-label></b> and <b><mp-label iri='{{target.value}}'></mp-label></b>
+          </p>
+          <p>Confidence: {{conf.value}}%</p>
+          <bs-tabs id="tabs" default-active-key='1'>
+            {{> similarity:fragments::tab-chart-view}}
+            {{> similarity:fragments::tab-table-view}}
+            {{> similarity:fragments::tab-intersection-view}}
+          </bs-tabs>
+        </mp-overlay-dialog-content>
+      </mp-overlay-dialog>
+    </template>
+    <template id='no-res'>
+      <div class='mt-2'>
+        Could not predict similar persons.
+      </div>
+    </template>
+  </semantic-table>
+</semantic-context>
+  
+</template-fragment>

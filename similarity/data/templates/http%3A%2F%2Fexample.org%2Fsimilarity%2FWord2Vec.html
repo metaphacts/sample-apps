@@ -1,0 +1,287 @@
+<!-- Styles -->
+<style>
+  .modal-lg, .modal-xl {
+    max-width: 1600px;
+  }
+
+  .outer-text-div {
+    background-color:white;
+    width:100%;
+  }
+
+  .inner-text-div {
+    width: 50%; padding: 0 10px;
+  }
+</style>
+
+
+<!-- Breadcrumbs -->
+<ol class="page-breadcrumb">
+  <li>
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:Start"}}'>Start</semantic-link> 
+  </li>
+  <li class="active">
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:Word2Vec"}}'>Word2Vec Similarity</semantic-link> 
+    
+  </li>
+</ol>
+
+<!-- Main -->
+<div class="page">
+  <div class='page__body'> 
+    {{> ::similarity-description}}
+    {{> ::source-selector}}
+  </div>
+</div>
+
+<!-- Description -->
+<template-fragment id='similarity-description'>
+  <p>
+    In this example, we obtain similarity measurement from an external service that uses a Word2Vec similarity.
+    We combine the explicit data from Wikidata with an implicit model based on word embeddings.
+    Specifically, we use the Word2vec model used to represent similar instances based on a textual description.
+    The model is provided by the <a href="https://tools.wmflabs.org/wembedder/most-similar/" target="_blank">wembedder most-similar service</a> 
+  </p>
+</template-fragment>
+
+<!-- SOURCE SELECTOR MAIN FRAGMENT  -->
+<template-fragment id='source-selector'>
+  <semantic-search id="selector">
+    <semantic-search-form-query 
+      query-template='{
+        "queryString": "SELECT ?subject WHERE { BIND(?item as ?subject) }",
+          "arguments": {
+            "item": {"type": "xsd:anyURI", "optional": false}
+          }
+      }' 
+      fields='[
+        {
+          "id": "item",
+          "label": "Select Item for Similarity Measurement",
+          "xsdDatatype": "xsd:anyURI",
+          "selectPattern": "SELECT ?value { BIND(<http://www.wikidata.org/entity/Q937> as ?value)}",
+          "valueSetPattern": "
+            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+            SELECT ?value ?label WHERE {
+            ?person a foaf:Person, <http://data.nobelprize.org/terms/Laureate>.
+            ?person rdfs:label ?label.
+            ?person owl:sameAs ?value.
+            FILTER (!isBlank(?value))
+          }"
+        }
+      ]'>
+          <semantic-form-select-input placeholder="Please select a resource" for="item" default-value=''></semantic-form-select-input>
+          <button type="button" name="submit" class="btn btn-primary">Find Similar Entries</button>
+    </semantic-search-form-query>
+
+    <semantic-search-result-holder>
+      <semantic-search-result> 
+        <semantic-query id="form" 
+          query="
+            PREFIX wd: <http://www.wikidata.org/entity/>
+            SELECT ?inputID WHERE {
+              BIND(STRAFTER(STR(?subject), STR(wd:)) AS ?inputID)
+              FILTER(STRSTARTS(STR(?subject), STR(wd:)))
+          }"
+          template='{{> word2vec-similarity}}'
+        >
+          <template id="word2vec-similarity">
+            {{#each bindings}}
+              {{> ::get-word2vec-similarity inputID=inputID}}
+            {{/each}}
+          </template>
+        </semantic-query>
+      </semantic-search-result>
+    </semantic-search-result-holder>
+  </semantic-search>
+</template-fragment>
+
+<!-- receives inputID as parameter -->
+<template-fragment id='get-word2vec-similarity'>
+   <semantic-table
+    no-result-template='Could not find similar entries.'
+    query="
+      PREFIX wd: <http://www.wikidata.org/entity/>
+      PREFIX word2vec: <http://www.metaphacts.com/ontologies/word2vec#>
+      PREFIX federation: <http://www.metaphacts.com/ontologies/platform/repository/federation#>
+      SELECT ?sourceItem ?similarWikidataItem ?similarity (xsd:int(?similarity*100) as ?percent) WHERE {
+        
+        #Get Similar Items from Service
+        SERVICE SILENT federation:most-similar {
+          ?res word2vec:search     {{inputID}};
+              word2vec:item       ?similarItem;
+              word2vec:similarity ?similarity.
+        }
+        FILTER(BOUND(?similarItem))
+        BIND(URI(CONCAT(STR(<http://www.wikidata.org/entity/>), STR(?similarItem))) AS ?similarWikidataItem)
+        BIND(URI(CONCAT(STR(<http://www.wikidata.org/entity/>), STR({{inputID}}))) AS ?sourceItem)
+      }
+      ORDER BY DESC (?similarity)
+    "
+    column-configuration='[
+      {
+        "displayName": "External Resource",
+        "cellTemplate": "{{> is-external}}"
+      },
+      {
+        "variableName": "label",
+        "displayName": "Label",
+        "cellTemplate": "{{> entry-get-label}}"
+      },{
+        "variableName": "similarity",
+        "displayName": "Similarity",
+        "cellTemplate": "<b>{{percent.value}}%</b> {{> explainTemplate}}"
+      },{
+        "variableName": "similarWikidataItem",
+        "displayName": "Similar Item",
+        "cellTemplate": "{{> link-out}}"
+      }
+    ]'
+  >
+    <!-- template defining the dialog for explaining the results -->
+    <template id='explainTemplate'>
+      <mp-overlay-dialog title="Word2Vec Similarity" bs-size="large">
+        <!-- Trigger -->
+        <mp-overlay-dialog-trigger>
+          <button class='ml-4 btn btn-icon btn-secondary'>
+            <i class='fa fa-eye' aria-hidden='true'></i>
+          </button>
+        </mp-overlay-dialog-trigger>
+  
+        <!-- Content -->
+        <mp-overlay-dialog-content> 
+          <div class='d-flex outer-text-div'>
+            <div class='inner-text-div'>
+              {{> ::get-textual-description iri=sourceItem.value}}
+            </div>
+            <div class='inner-text-div'>
+              {{> ::get-textual-description iri=similarWikidataItem.value}}
+            </div>
+          </div>
+        </mp-overlay-dialog-content>
+      </mp-overlay-dialog>
+    </template> 
+
+    <!-- Template for checking if an Wikidata entry is a laureate -->
+    <template id='is-external'>
+      <semantic-if 
+        query='
+          PREFIX similarity: <http://example.org/similarity/>
+          ASK {
+            {{similarWikidataItem}} a similarity:Person.
+          }'
+        then='{{> then}}' else='{{> else}}'>
+        <template id='then'><i class='fa fa-square-o' aria-hidden='true'></i></template>
+        <template id='else'><i class='fa fa-check-square-o' aria-hidden='true'></i>
+          <semantic-update 
+           post-action='reload'
+           variable-params='["person", "predicate", "object", "objectLabel", "subjectLabel"]'
+          query='
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+          PREFIX similarity: <http://example.org/similarity/>
+          INSERT {
+             GRAPH <http://example.org/similarity/resources/> {
+                ?person a similarity:Person.
+                ?person ?predicate ?object.
+                ?object rdfs:label ?objectLabel.
+                ?person rdfs:label ?subjectLabel.
+              }
+            } WHERE {
+               VALUES (?person) {
+                ({{similarWikidataItem}})
+              }
+              SERVICE <https://query.wikidata.org/sparql> {
+  	            SELECT ?predicate ?subjectLabel ?object ?objectLabel  WHERE {
+  	              ?person ?predicate ?object.
+  	              ?object rdfs:label ?objectLabel.
+                  ?person rdfs:label ?subjectLabel.
+                  FILTER (lang(?objectLabel) = "en")     
+                  FILTER (lang(?subjectLabel) = "en")     
+	              }
+              }
+            }
+          
+          '><button class='ml-2 btn btn-secondary'>Import Resource</button></semantic-update>
+        </template>
+
+      </semantic-if>
+    </template>
+
+    <!-- Template for linking to Wikidata -->
+    <template id='link-out'>
+      <a href='{{similarWikidataItem.value}}' target='_blank'>
+        <span>
+          <mp-label iri='{{similarWikidataItem.value}}'></mp-label>
+          <i class='fa fa-external-link ml-2'></i>
+        </span>
+      </a>
+    </template>
+  
+    <!-- Getting labels for ids if we do not have it -->
+    <template id='entry-get-label'>
+      <semantic-query 
+        query='
+          SELECT ?value WHERE {
+           
+           BIND({{similarWikidataItem}} as ?value)
+           ?value rdfs:label ?label.
+          }
+        '
+        no-result-template='{{> fetch-label}}'
+      >
+        <!-- result template that fetches the labels  -->
+        <template id='fetch-label'> 
+          <semantic-query 
+            query='
+              SELECT ?label WHERE {
+                SERVICE <https://query.wikidata.org/sparql> {
+                  SELECT ?label WHERE {
+                    {{similarWikidataItem}} rdfs:label ?label.
+                    FILTER (lang(?label) = "en")     
+                  }
+                }
+              }
+            '></semantic-query>
+        </template>
+
+      </semantic-query>
+    </template> 
+  </semantic-table>
+ 
+</template-fragment>
+
+<!-- receives iri as selector, iri must be a Wikidata entity ID iri 
+(e.g. http://www.wikidata.org/entity/Q307 ) -->
+<template-fragment id='get-textual-description'>
+  <semantic-query 
+    query='
+      SELECT ?label ?text ?abstract WHERE { 
+      {
+        SERVICE <https://query.wikidata.org/sparql> {
+          SELECT ?label ?text WHERE {
+            <{{iri}}> rdfs:label ?label.   
+            <{{iri}}> <http://schema.org/description> ?text .
+            FILTER (lang(?label) = "en")                     
+            FILTER (lang(?text) = "en")    
+          }                      
+        }
+
+        SERVICE <https://dbpedia.org/sparql/> {
+          SELECT ?abstract WHERE {
+            ?res owl:sameAs  <{{iri}}>.
+            ?res <http://dbpedia.org/ontology/abstract> ?abstract.
+            FILTER (lang(?abstract) = "en")  
+          }
+        }
+      }
+    }'
+    template='{{> wikidata-results-target}}'
+  >
+    <template id='wikidata-results-target'>
+      <h3>{{bindings.0.label.value}}</h3>
+      {{bindings.0.text.value}}
+      <hr>
+      {{bindings.0.abstract.value}}
+    </template>
+  </semantic-query>
+</template-fragment>

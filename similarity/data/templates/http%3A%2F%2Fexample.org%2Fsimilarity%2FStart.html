@@ -1,0 +1,275 @@
+<!-- Styles -->
+<style>
+  .chevron-down i {
+    rotate: 90deg;
+    padding-top:4px;
+    padding-left: 4px;
+  }
+</style>
+
+<!-- Breadcrumbs -->
+<ol class="page-breadcrumb">
+  <li class="active">
+    Similarity App
+  </li>
+</ol>
+
+<!-- Main -->
+<div class="page">
+  <div class='page__body'> 
+    {{> ::disclaimer}}
+
+    <h1>Discover Similarity Between Resources </h1>
+   
+    {{> ::introduction}}   
+    {{> ::jaccard-similarity}}
+    {{> ::word2vec-similarity}}
+    {{> ::ml-similarity}}
+  </div>
+</div>
+
+<!-- Template fragments -->
+
+<!-- Disclaimer -->
+<template-fragment id='disclaimer'>
+  <bs-alert dismissible='true' variant="info" class="alert-icon">
+    <p> 
+      <b>Disclaimer:</b> This app uses the Nobel Prize Dataset Bundle and additional augmentation data which is obtained by using the Wikidata SPARQL endpoint.
+    </p>
+    <!-- Check if data is loaded -->
+    {{> similarity:create-data::create-data}}
+  </bs-alert>
+</template-fragment>
+
+<!-- Abstract -->
+<template-fragment id='introduction'>
+  <h2 id="introduction">Introduction</h2>
+  <p>This application show cases the different similarity measurements that can be used in combination with metaphactory.</p>
+  <p>In this app, we highlight different scenarios with corresponding examples for their realization.</p>
+  
+  <ul>
+    <li>
+      <mp-anchor to='sparql-similarity'>Similarity Measurements using SPARQL</mp-anchor> -> 
+      <semantic-link iri='{{rdf-resolvePrefix "similarity:Jaccard"}}'><b>Example using Jaccard Similarity</b></semantic-link>.
+    </li>
+    <li>
+      <mp-anchor to='word2vec'>Similarity using Ephedra Service</mp-anchor> -> 
+      <semantic-link iri='{{rdf-resolvePrefix "similarity:Word2Vec"}}'><b>Example Ephedra Service using Word2Vec Similarity</b></semantic-link>.
+    </li>
+    <li>
+      <mp-anchor to='ML-with-database'>Machine Learning Capabilities of DB Vendors</mp-anchor> -> 
+      <semantic-link iri='{{rdf-resolvePrefix "similarity:ML-with-database"}}'><b>Example using Stardog and its Cluster Pruning Algorithm</b></semantic-link>.
+    </li>
+  </ul>   
+</template-fragment>
+
+<!-- Jaccard Similarity -->
+<template-fragment id='jaccard-similarity'>
+  <h2 id="sparql-similarity">Similarity Measurements using SPARQL</h2>
+  <p>
+    The Jaccard similarity allows us to measure similarity between resources through the means of sparql queries. 
+    In this example, we investigate the similarity between <code>Albert Einstein</code> and other <code>Persons</code>.
+  </p>
+     
+  <mp-collapsible-div expanded='false'>
+    <mp-collapsible-div-trigger class='mb-2'>More Details</mp-collapsible-div-trigger>
+    <mp-collapsible-div-content>
+      <p>
+        We apply the following definitions for intersection and union counts.
+      </p>
+      <ul> 
+        <li>
+          Intersection: Two statements 
+          <code> &lt; s1 p1 o1 &gt; </code> and
+          <code> &lt; s2 p2 o2 &gt; </code> are intersecting when <code> p1==p2</code> and <code>o1==o2 </code>
+        </li>
+        <li>
+          Union: As union count we use the following definition <code> |A|+|B| - |A and B|</code>, where <code>|A|</code> refers to the count of distinct properties of <code>s1</code> and <code>|B|</code> to the count distinct properties of <code>s2</code>.
+          <code>|A and B|</code> denotes the intersection of A and B.
+        </li>
+      </ul>
+      <p>
+        More details about the definition of the Jaccard similarity can be found here: <a href='https://en.wikipedia.org/wiki/Jaccard_index' target='__blank'>https://en.wikipedia.org/wiki/Jaccard_index</a>.
+      </p>
+    </mp-collapsible-div-content>
+  </mp-collapsible-div>
+
+  <!-- Link to demo -->
+  <semantic-link iri='{{rdf-resolvePrefix "similarity:Jaccard"}}'><b>Example using Jaccard Similarity</b> </semantic-link>.
+ 
+</template-fragment>
+
+<!-- Word2Vec Similarity -->
+<template-fragment id='word2vec-similarity'>
+  <h2 id="word2vec">
+  Similarity Measurements using Ephedra (RESTful API)
+  </h2>
+  <p>
+    In this example we compute the similarity between resources using an external service (i.e. <a href="https://wembedder.toolforge.org/">Wembedder</a>). 
+    We supply the Wembedder service with an Wikidata entity id and it returns similar entries as a list of Wikidata entity ids. 
+    The resulting Wikidata IDs may correspond with the existing laureates in the Nobel Prize Dataset.
+    However, in this example we do not restrict the results to be laureates, but we indicate it in the resulting table. 
+    <p>
+      More information about the wembedder most-similar service can be found <a href="https://wembedder.toolforge.org/about">here</a>.
+    </p>
+  </p>
+  
+  <semantic-link iri='{{rdf-resolvePrefix "similarity:Word2Vec"}}'><b>Example Ephedra Service using Word2Vec Similarity</b></semantic-link>
+  <br />
+  <br />
+  <p>
+    Please note that this examples requires additional configurations of a repository and a service.
+  </p>
+  <mp-collapsible-div expanded='true'>
+    <mp-collapsible-div-trigger>Setup Information</mp-collapsible-div-trigger>
+    <mp-collapsible-div-content>
+      <p>
+        Using the Ephedra service for similarity requires additional setup of a repository and an additional service.
+        In the following, we provide the configuration of the repository <code>most-similar</code> which uses Wembedder's most similar API. 
+      </p>
+      {{> ::configuration-details}}
+    </mp-collapsible-div-content>
+  </mp-collapsible-div>
+</template-fragment>
+
+<!-- ML Within Database -->
+<template-fragment id='ml-similarity'>
+  <h2 id="ML-with-database">Similarity Measurements using ML Capabilities of Database Vendors</h2>
+  <p>
+    In this example, we showcase one example that applies machine learning approaches directly within the database (i.e. Stardog)
+  </p>
+  <bs-alert variant="info">
+    <h3>Pre-requisite</h3>
+    For the examples you require Stardog configured as database. 
+  </bs-alert>
+  <semantic-link iri='{{rdf-resolvePrefix "similarity:ML-with-database"}}'><b>Example using Stardog and its Cluster Pruning Algorithm</b></semantic-link>
+</template-fragment>
+
+
+
+
+<!-- Configuration details -->
+<template-fragment id='configuration-details'>
+  <mp-collapsible-div>
+    <mp-collapsible-div-trigger>Repository Configuration</mp-collapsible-div-trigger>
+    <mp-collapsible-div-content>
+      <mp-code-block>
+@prefix lookup: &lt;http://www.metaphacts.com/ontologies/platform/repository/lookup#> .
+@prefix pathfinder: &lt;http://www.metaphacts.com/ontologies/platform/service/pathfinder/> .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#> .
+@prefix rep: &lt;http://www.openrdf.org/config/repository#> .
+@prefix sail: &lt;http://www.openrdf.org/config/sail#> .
+@prefix sr: &lt;http://www.openrdf.org/config/repository/sail#> .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#> .
+@prefix mph: &lt;http://www.metaphacts.com/ontologies/platform/repository#> .
+@prefix ephedra: &lt;http://www.metaphacts.com/ontologies/platform/ephedra#> .
+@prefix sparqlr: &lt;http://www.openrdf.org/config/repository/sparql#> .
+
+[] a rep:Repository;
+  rep:repositoryID "most-similar";
+  rdfs:label "Repository to connect to a remote REST API.";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          sail:sailType "metaphacts:RESTService";
+          ephedra:serviceURL "https://wembedder.toolforge.org/api/most-similar/{search}";
+          ephedra:implementsService ephedra:most-similar;
+          ephedra:httpMethod "GET";
+          ephedra:httpHeader [
+              ephedra:name "Accept";
+              ephedra:value "application/json"
+            ]
+        ]
+    ] .
+      </mp-code-block>  
+    <p>
+      Note the line <code>ephedra:serviceURL "https://wembedder.toolforge.org/api/most-similar/{search}";</code>, here the <code>{search}</code> will later be inline replaced with the Wikidata ID (e.g. Q9036 )
+    </p>
+    <bs-alert variant="info">
+      Note the repository <code>most-similar</code> needs to be registered also in the defaultEphedra repository as a service member.
+      <mp-code-block show-copy-button='false'>
+...          
+[] a rep:Repository;
+  rep:repositoryID "defaultEphedra";
+  rep:repositoryImpl [
+      rep:repositoryType "metaphacts:EphedraRepository";
+      ephedra:serviceMember [
+        ephedra:delegateRepositoryID "most-similar";
+        ephedra:serviceReference &lt;http://www.metaphacts.com/ontologies/platform/repository/federation#most-similar>
+      ], ...
+      </mp-code-block>
+    </bs-alert>
+    </mp-collapsible-div-content>
+  </mp-collapsible-div>
+  <mp-collapsible-div>
+    <mp-collapsible-div-trigger>Service Configuration</mp-collapsible-div-trigger>
+    <mp-collapsible-div-content>
+      <mp-code-block>
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sp: &lt;http://spinrdf.org/sp#>
+PREFIX spin: &lt;http://spinrdf.org/spin#>
+PREFIX spl: &lt;http://spinrdf.org/spl#>
+PREFIX word2vec: &lt;http://www.metaphacts.com/ontologies/word2vec#>
+PREFIX geo: &lt;http://www.opengis.net/ont/geosparql#>
+PREFIX ephedra: &lt;http://www.metaphacts.com/ontologies/platform/ephedra#>
+PREFIX : &lt;http://www.metaphacts.com/ontologies/platform/service/custom#>
+
+ephedra:most-similar a ephedra:Service ;
+&lt;http://www.openrdf.org/config/sail#sailType> "metaphacts:RESTService" ;
+&lt;http://www.w3.org/2000/01/rdf-schema#label> "A wrapper for a REST API." ;
+ephedra:hasSPARQLPattern (
+  [
+    sp:subject :_results ;
+    sp:predicate word2vec:search ;
+    sp:object :_search
+  ]
+
+  [
+    sp:subject :_result ;
+    sp:predicate word2vec:item ;
+    sp:object :_item
+  ]
+  [
+    sp:subject :_result ;
+    sp:predicate word2vec:similarity ;
+    sp:object :_similarity
+  ]
+) ;
+
+spin:constraint
+[
+  a spl:Argument ;
+    rdfs:comment "search" ;
+    spl:predicate :_search ;
+    spl:valueType xsd:string
+] ;
+
+spin:column
+[
+  a spin:Column ;
+    rdfs:comment "result" ;
+    spl:predicate :_results ;
+    spl:valueType rdfs:Resource;
+    ephedra:jsonPath "$.most_similar[*]"
+] ;
+spin:column
+[
+  a spin:Column ;
+    rdfs:comment "item" ;
+    spl:predicate :_item ;
+    spl:valueType xsd:string;
+    ephedra:jsonPath "$.item"
+] ;
+spin:column
+[
+  a spin:Column ;
+    rdfs:comment "similarity" ;
+    spl:predicate :_similarity ;
+    spl:valueType xsd:decimal;
+    ephedra:jsonPath "$.similarity"
+] .
+
+      </mp-code-block>
+    </mp-collapsible-div-content>
+  </mp-collapsible-div>
+</template-fragment>

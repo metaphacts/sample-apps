@@ -1,0 +1,136 @@
+
+<!-- Chart view tab -->
+<template-fragment export id='tab-chart-view'>
+  <bs-tab event-key="1" title="Chart">
+    <semantic-chart type='bar' 
+      query='
+        SELECT ?p1 ?v1 ?v2 ?v3 WHERE {
+          {
+            #Count all properties from source
+            SELECT (?property as ?p1) (COUNT(?object) as ?v1)
+            {
+    	        {
+                {{source}} ?property ?object .
+              } 
+              UNION 
+              {
+                {{source}} ^owl:sameAs ?_source.
+                ?_source ?property ?object .
+              }
+            }
+             GROUP BY ?property
+          }
+          {
+            #Count all properties from target
+            SELECT (?p2 as ?p1) (COUNT(?object2) as ?v2)
+            {
+    	        { {{target}} ?p2 ?object2 .} 
+              UNION {
+                {{target}} ^owl:sameAs ?_target.
+   		          ?_target ?p2 ?object2 .
+              }
+            } GROUP BY ?p2
+          }
+          {
+            #Intersection counts
+            SELECT (?p3 as ?p1) (COUNT(?object3) as ?v3){
+              {
+                {{source}} ?p3 ?object3 .
+   		          {{target}} ?p3 ?object3 .
+              } UNION {
+                {{source}} ^owl:sameAs ?_source.
+                {{target}} ^owl:sameAs ?_target.
+                ?_source ?p3 ?object3 .
+   		          ?_target ?p3 ?object3 .
+              }
+
+            } GROUP BY ?p3
+          }
+        }'
+      sets='[
+        {"dataSetIRI": "{{source.value}}", "category": "p1", "value": "v1"},
+        {"dataSetIRI": "{{target.value}}", "category": "p1", "value": "v2"},
+        {"dataSetName": "intersection", "category": "p1", "value": "v3"}
+      ]'
+    ></semantic-chart>
+  </bs-tab>
+</template-fragment>
+
+<!-- Table view tab -->
+<template-fragment export id='tab-table-view'>
+  <bs-tab event-key="2" title="Table">
+    <div class='d-flex' style='gap:8px;'> 
+      <!-- Source table showing all values  -->
+      <div style='width:50%'>
+        <h1>
+          <mp-label iri='{{source.value}}'></mp-label>
+        </h1>
+        <semantic-table 
+          query='                  
+            SELECT  ?property ?value  WHERE {
+            {
+              {{source}} ?property ?value. 
+            } UNION {
+              {{source}} ^owl:sameAs ?_source.
+              ?_source ?property ?value. 
+              FILTER (!isBlank(?_source))
+            }
+            }'
+          options='{{> ::table-options}}'
+        ></semantic-table>
+      </div>
+      <!-- target table showing all values  -->
+      <div style='width:50%'>
+        <h1>
+          <mp-label iri='{{target.value}}'></mp-label>
+        </h1>
+        <semantic-table
+          query='                  
+            SELECT  ?property ?value  WHERE {
+            {
+              {{target}} ?property ?value. 
+            } UNION {
+              {{target}} ^owl:sameAs ?_target.
+              ?_target ?property ?value. 
+              FILTER (!isBlank(?_target))
+            }
+          }'
+          options='{{> ::table-options}}'
+        > </semantic-table>
+      </div>
+    </div>
+  </bs-tab>
+</template-fragment>
+
+<!-- Intersection tab -->
+<template-fragment export id='tab-intersection-view'>
+  <bs-tab event-key="3" title="Intersection">
+    <semantic-table
+      query='              
+        SELECT ?property ?value  WHERE {
+          {
+            {{target}} ?property ?value. 
+            {{source}} ?property ?value. 
+          }
+          UNION {
+            {{target}} ^owl:sameAs ?_target.
+            {{source}} ^owl:sameAs ?_source.
+            ?_target ?property ?value. 
+            ?_source ?property ?value. 
+            FILTER (!isBlank(?_source))
+            FILTER (!isBlank(?_target))
+          }
+          
+        }'
+      options='{{> ::table-options}}'
+    > </semantic-table>
+  </bs-tab>
+</template-fragment>
+
+<template-fragment id="table-options">{
+    "enableGrouping": true,
+    "groupingOptions": {"groupedBy": ["property"]},
+    "pageSizeSelection": true,
+    "showNumberOfRows": true
+}
+</template-fragment>

@@ -1,0 +1,120 @@
+<!-- Styles -->
+<style>
+  .modal-lg, .modal-xl {
+    max-width: 1600px;
+  }
+</style>
+
+<!-- Breadcrumbs -->
+<ol class="page-breadcrumb">
+  <li>
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:Start"}}'>Start</semantic-link> 
+  </li>
+  <li class="active">
+    <semantic-link iri='{{rdf-resolvePrefix "similarity:Jaccard"}}'>Jaccard Similarity</semantic-link> 
+  </li>
+</ol>
+
+<!-- Main -->
+<div class='page'>
+  <div class='page__body'>
+    {{> ::jaccard-example}}
+  </div>
+</div>
+
+
+<!-- Main fragment -->
+<template-fragment id='jaccard-example'>
+  <h1>Jaccard Similarity</h1>
+  <p> 
+    In this example we want to find <code>10</code> similar persons to <code>Albert Einstein</code>. 
+  </p>
+  
+  <p>
+    Click on the <i class='fa fa-eye' aria-hidden='true'></i> icon for an explanation of the results.
+  </p>
+
+  <!-- Query  -->
+  <mp-collapsible-div expanded='false'>
+    <mp-collapsible-div-trigger class='mb-2'>Show Query</mp-collapsible-div-trigger>
+    <mp-collapsible-div-content>
+      <mp-code-block mode='application/sparql-query' code-text='{{> ::similarity-query}}'></mp-code-block>
+    </mp-collapsible-div-content>
+  </mp-collapsible-div>
+  
+  <!-- Semantic table for displaying the similarity -->
+  <semantic-table query='{{> ::similarity-query}}' 
+    options='{"showFilter": false}'
+    column-configuration='[
+      { 
+        "variableName":"target", "displayName":"Similar Laureate" 
+      },{
+        "variableName":"similarity",
+        "displayName":"Similarity", 
+        "cellTemplate": "<b>{{similarity.value}}%</b> {{> explainTemplate}}" 
+      }
+    ]'   
+    no-result-template='No data found'           
+  > 
+    <!-- template defining the dialog explaining the results -->
+    <template id='explainTemplate'>
+      <mp-overlay-dialog title="Jaccard Similarity" bs-size="large">
+        <!-- Trigger -->
+        <mp-overlay-dialog-trigger>
+          <button class='ml-4 btn btn-icon btn-secondary'>
+            <i class='fa fa-eye' aria-hidden='true'></i>
+          </button>
+        </mp-overlay-dialog-trigger>
+        <!-- Content -->
+        <mp-overlay-dialog-content> 
+          <p>
+            Comparing <b><mp-label iri='{{source.value}}'></mp-label></b> and <b><mp-label iri='{{target.value}}'></mp-label></b>
+          </p>
+          <p>Jaccard Similarity: {{similarity.value}}%</p>
+          <bs-tabs id="tabs" default-active-key='1'>
+            {{> similarity:fragments::tab-chart-view}}
+            {{> similarity:fragments::tab-table-view}}
+            {{> similarity:fragments::tab-intersection-view}}
+          </bs-tabs>
+        </mp-overlay-dialog-content>
+      </mp-overlay-dialog>
+    </template> 
+  </semantic-table>
+</template-fragment>
+
+
+<!-- Query obtaining the jaccard similarity for given source *MUST* -->
+<template-fragment id='similarity-query'>
+  PREFIX similarity: &lt;http://example.org/similarity/>
+  SELECT(xsd:integer(?intersection/?union*100) as ?similarity) ?source ?sourceWikidataEntity ?target ?targetWikidataEntity ?countA ?countB  ?intersection WHERE {
+    {
+      SELECT ?source ?target ?countA ?countB (xsd:integer(?countA+?countB-?intersection) as ?union) ?intersection WHERE {
+      #INTERSECTION 
+      {
+        SELECT distinct ?target (count(distinct ?p1) as ?intersection) WHERE {
+          VALUES ?source { &lt;http://www.wikidata.org/entity/Q937> }
+          ?target a similarity:Person .
+
+          ?source ?p1 ?v .
+          ?target ?p1 ?v .
+
+        
+        } GROUP BY ?target
+      }
+      #UNION Computation 
+      {
+        SELECT ?source (count(distinct ?p1) as ?countA) WHERE {
+          VALUES ?source { &lt;http://www.wikidata.org/entity/Q937>  }
+           ?source ?p1 ?v .
+        } GROUP BY ?source
+      }{
+        SELECT ?target (count(distinct ?p2) as ?countB) WHERE {
+         ?target a similarity:Person .
+         ?target ?p2 ?v .
+        } GROUP BY ?target
+      }
+    }} FILTER(?source != ?target)
+  }
+  ORDER BY DESC(?similarity)
+  LIMIT 10
+</template-fragment>
