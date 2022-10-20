@@ -67,7 +67,7 @@ if (webappDir.exists()) {
 			}
 
 			dependencies {
-				compileOnly name: 'metaphacts-platform'
+				compileOnly name: 'metaphactory'
 			}
 		}
 	}
