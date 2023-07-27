@@ -36,8 +36,8 @@ import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
-import org.eclipse.rdf4j.query.algebra.evaluation.impl.BindingAssigner;
-import org.eclipse.rdf4j.query.algebra.helpers.StatementPatternCollector;
+import org.eclipse.rdf4j.query.algebra.evaluation.optimizer.BindingAssignerOptimizer;
+import org.eclipse.rdf4j.query.algebra.helpers.collectors.StatementPatternCollector;
 import org.eclipse.rdf4j.query.impl.MapBindingSet;
 import org.eclipse.rdf4j.repository.sparql.federation.CollectionIteration;
 import org.eclipse.rdf4j.sail.SailException;
@@ -79,7 +79,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
     protected CloseableIteration<? extends BindingSet, QueryEvaluationException> evaluateInternal(TupleExpr tupleExpr,
             Dataset dataset, BindingSet bindings, boolean includeInferred) throws SailException {
         TupleExpr cloned = tupleExpr.clone();
-        new BindingAssigner().optimize(cloned, dataset, bindings);
+        new BindingAssignerOptimizer().optimize(cloned, dataset, bindings);
         StatementPatternCollector collector = new StatementPatternCollector();
         cloned.visit(collector);
         List<StatementPattern> stmtPatterns = collector.getStatementPatterns();

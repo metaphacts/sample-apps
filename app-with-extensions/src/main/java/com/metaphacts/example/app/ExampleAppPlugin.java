@@ -3,8 +3,7 @@
  */
 package com.metaphacts.example.app;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+
 
 import org.pf4j.Plugin;
 import org.pf4j.PluginWrapper;
@@ -12,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.jknack.handlebars.HelperRegistry;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+
 
 public class ExampleAppPlugin extends Plugin {
     private static final Logger logger = LoggerFactory.getLogger(ExampleAppPlugin.class);

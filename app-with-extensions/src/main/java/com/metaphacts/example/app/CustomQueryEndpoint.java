@@ -3,13 +3,7 @@
  */
 package com.metaphacts.example.app;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -23,12 +17,20 @@ import org.slf4j.LoggerFactory;
 import com.metaphacts.plugin.extension.RestExtension;
 import com.metaphacts.repository.RepositoryManagerInterface;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
+
 /**
  * This class serves as a test endpoint extensions to access functionality provided via dependency injection.
  * 
  * @author Wolfgang Schell <ws@metaphacts.com>
  */
-@Singleton
+@ApplicationScoped
 @Path("custom")
 public class CustomQueryEndpoint implements RestExtension {
     private static final Logger logger = LoggerFactory.getLogger(CustomQueryEndpoint.class);

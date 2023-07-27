@@ -9,3 +9,5 @@ tmp
 runtime
 gradle.properties
 ephedra-sql-dvdrental/dvdrental-postgres/dvdrental.tar
+platform-*
+.DS_Store

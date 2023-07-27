@@ -51,14 +51,14 @@
       query-template='{
         "queryString": "SELECT ?subject WHERE { BIND(?item as ?subject) }",
           "arguments": {
-            "item": {"type": "xsd:anyURI", "optional": false}
+            "item": {"optional": false}
           }
       }' 
       fields='[
         {
           "id": "item",
           "label": "Select Item for Similarity Measurement",
-          "xsdDatatype": "xsd:anyURI",
+          "range": ["http://www.w3.org/2002/07/owl#Thing"],
           "selectPattern": "SELECT ?value { BIND(<http://www.wikidata.org/entity/Q937> as ?value)}",
           "valueSetPattern": "
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>

@@ -5,7 +5,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "org.gretty:gretty:3.0.7"
+		classpath "org.gretty:gretty:4.0.3"
 	}
 }
 
@@ -28,8 +28,8 @@ configure(appProjects) {
 	apply plugin: 'java-library'
 	apply plugin: 'eclipse'
 	
-	sourceCompatibility = 11
-	targetCompatibility = 11
+	sourceCompatibility = 17
+	targetCompatibility = 17
 	
 	apply from: rootProject.file('.sdk/app.sdk.gradle')
 	apply from: rootProject.file('.sdk/dependencies.include.gradle')

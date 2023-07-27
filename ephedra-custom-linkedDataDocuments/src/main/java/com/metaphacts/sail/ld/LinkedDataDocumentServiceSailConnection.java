@@ -35,7 +35,7 @@ import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Var;
-import org.eclipse.rdf4j.query.algebra.evaluation.impl.BindingAssigner;
+import org.eclipse.rdf4j.query.algebra.evaluation.optimizer.BindingAssignerOptimizer;
 import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 import org.eclipse.rdf4j.query.impl.MapBindingSet;
 import org.eclipse.rdf4j.repository.sparql.federation.CollectionIteration;
@@ -74,7 +74,7 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
         TupleExpr cloned = tuple.clone();
         // Important! You need to assign the values to the variables which were already
         // bound in other clauses of the query
-        new BindingAssigner().optimize(cloned, dataset, bindings);
+        new BindingAssignerOptimizer().optimize(cloned, dataset, bindings);
 
         LinkedDataDocumentStatementCollector info = new LinkedDataDocumentStatementCollector();
         cloned.visit(info);

@@ -1,5 +1,7 @@
 package com.metaphacts.sail.ld;
 
+import java.io.File;
+
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -9,22 +11,21 @@ import org.eclipse.rdf4j.query.parser.QueryParserUtil;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.metaphacts.sail.ld.LinkedDataDocumentServiceSailConnection.LinkedDataDocumentStatementCollector;
 
 public class LinkedDataDocumentServiceSailTest {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    public File tempFolder;
 
     @Test
     public void test() throws Exception {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
-        repo.setDataDir(tempFolder.newFolder("dataDir"));
+        repo.setDataDir(tempFolder);
         repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
@@ -48,7 +49,7 @@ public class LinkedDataDocumentServiceSailTest {
     public void testWithContentNegotiation2() throws Exception {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
-        repo.setDataDir(tempFolder.newFolder("dataDir"));
+        repo.setDataDir(tempFolder);
         repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
@@ -72,7 +73,7 @@ public class LinkedDataDocumentServiceSailTest {
     public void testFollowPredicate() throws Exception {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
-        repo.setDataDir(tempFolder.newFolder("dataDir"));
+        repo.setDataDir(tempFolder);
         repo.init();
 
         try (RepositoryConnection conn = repo.getConnection()) {
@@ -99,7 +100,7 @@ public class LinkedDataDocumentServiceSailTest {
     public void testFollowPredicate2() throws Exception {
 
         Repository repo = new SailRepository(new LinkedDataDocumentServiceSail());
-        repo.setDataDir(tempFolder.newFolder("dataDir"));
+        repo.setDataDir(tempFolder);
 //        repo.setDataDir(new File("tmp/cache"));
         repo.init();
 

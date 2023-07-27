@@ -26,9 +26,11 @@ e.g. in `gradle.properties`.
 
 ### Pre-Requisites
 
-* JDK 11 installed on the local machine, JAVA-HOME pointing to the installation
+* JDK 17 installed on the local machine, JAVA-HOME pointing to the installation
 * Copy of a binary WAR distribution of a platform release on the local host
 * (Optionally) Eclipse as IDE
+
+Note: as of metaphactory 5.0 we have switch to Jakarta EE. The SDK and sample apps are adjusted accordingly. Earlier releases of metaphactory are not compatible. Apps written against an earlier version of the SDK may require migration.
 
 ### Obtaining a WAR distribution of the platform
 

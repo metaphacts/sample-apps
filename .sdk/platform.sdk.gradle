@@ -1,7 +1,7 @@
 /*
  * Platform SDK definiton
  *
- * (c) 2022 metaphacts GmbH
+ * (c) 2023 metaphacts GmbH
  *
  * This script is assumed to be included into the root project
  */
@@ -91,14 +91,25 @@ configure(project(':jetty')) {
 	}
 	
 	ext {
-		JETTY_VERSION = '9.4.46.v20220331'
+		JETTY_VERSION = '11.0.15'
 	}
 	
 	dependencies {
 		// make dependencies available for source code resolution when debugging Jetty code in the IDE
 		// this code is not used for compilation or other access
-		runtimeOnly group: 'org.eclipse.jetty', name: 'jetty-server', version: JETTY_VERSION
-		runtimeOnly group: 'org.eclipse.jetty', name: 'jetty-servlet', version: JETTY_VERSION
+		testImplementation group: 'org.eclipse.jetty', name: 'jetty-server', version: JETTY_VERSION
+		testImplementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: JETTY_VERSION
+		
+		// keep in sync with main dependencies!
+		gretty group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0', transitive: false
+		gretty group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '2.1.1', transitive: false
+		gretty group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2', transitive: false
+		gretty group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.1', transitive: false
+		gretty group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1', transitive: false
+
+		gretty group: 'org.eclipse.jetty', name: 'jetty-cdi', version: JETTY_VERSION
+		gretty group: 'jakarta.servlet.jsp.jstl', name: 'jakarta.servlet.jsp.jstl-api', version: '2.0.0'
+
 	}
 	
 	buildDir = rootProject.file('target/jetty/')
@@ -109,7 +120,6 @@ configure(project(':jetty')) {
 		loggingLevel='INFO'
 		contextPath=''
 		httpPort=10214
-		jetty94Version = JETTY_VERSION
 		
 		jvmArgs = []
 		
@@ -223,12 +233,28 @@ configure(project(':jetty')) {
 		appRunPrepare.dependsOn prepareRuntime
 		appRunPrepare.dependsOn refreshRuntimeApps
 		
+		// disabled as it delegates to appRunWar
+		appRun.enabled = false
 		appRun.dependsOn appRunPrepare
+		
+		// disabled as it delegates to appRunWarDebug
+		appRunDebug.enabled = false
+		appRunDebug.dependsOn appRunPrepare
+		
+		appRunWar.dependsOn appRunPrepare
+		
+		appRunWarDebug.dependsOn appRunPrepare
 		
 		appStart.dependsOn appRunPrepare
 	}
-
 }
+
+// always run from war, even when using appRun as task
+// always run from war, even when using appRun as task
+// that way we properly get a metaphactory jar with all 
+// beans being found by the scanning
+task appRun(dependsOn: ':jetty:appRunWar')
+task appRunDebug(dependsOn: ':jetty:appRunWarDebug')
 
 
 
