@@ -87,6 +87,8 @@ dependencies {
 	compileOnly group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
 	compileOnly group: 'commons-codec', name: 'commons-codec', version: '1.15', transitive: false
 	compileOnly "org.glassfish.jaxb:jaxb-runtime:2.3.3"
+	
+	compileOnly group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.8', transitive: false
 
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.2'
 	testImplementation group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'
