@@ -1,47 +1,47 @@
 <ol class="page-breadcrumb">
-    <li class="active">
-        Demo
-    </li>
+  <li class="active">
+    Demo
+  </li>
 </ol>
 
 <div class="page">
   <div class='page__body'>
     <h2>Demo page</h2>
-  
-    <p><b>Mona Lisa Museum</b>
-      
-	<p>The following demo retrieves information about the museum presenting the Mona Lisa from Wikidata, and furthermore retrieves
-	the borders of the museum's location district from OpenStreetMap. The result is presented on a map.</p>
 
-		<div style="width:800px; height: 500px">
-		
-		
-		<semantic-map id='map-result' query='
-			PREFIX wd: <http://www.wikidata.org/entity/> 
-			PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
-			PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-			PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-			PREFIX mp-fed: <http://www.metaphacts.com/ontologies/platform/repository/federation#> 
-			PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-			SELECT ?link ?wkt ?label WHERE { 
-				SERVICE <https://wikidata.metaphacts.com/sparql> { 
-						wd:Q12418 wdt:P276/wdt:P361* ?museum . 
-						?museum wdt:P131 ?geolocation . 
-						?geolocation rdfs:label ?label . 
-						FILTER (LANG(?label) = "en")
-				} 
-				SERVICE mp-fed:openstreetmap-geo { 
-					?result osm:hasSearchTerm ?label . 
-					?result osm:wktGeotext ?wkt . 
-				} 
-				FILTER(STRSTARTS(STR(?wkt), "POLYGON")) 
-			} LIMIT 1 '
-		fix-zoom-level=12
-		tuple-template='<b>{{label.value}}</b>'> 
-		</semantic-map>
-		
-		</div>
+    <p><b>Mona Lisa Museum</b></p>
 
- 
+    <p>The following demo retrieves information about the museum presenting the Mona Lisa from Wikidata, and furthermore
+      retrieves the museum's location district from OpenStreetMap. The result is presented on a map.</p>
+
+    <div style="width:800px; height: 500px">
+
+      <semantic-map
+        id='map-result'
+        query='
+	PREFIX wd: <http://www.wikidata.org/entity/> 
+	PREFIX osm: <http://www.metaphacts.com/ontologies/osm#> 
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+	PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
+	SELECT ?link ?wkt ?label WHERE { 
+		SERVICE <https://query.wikidata.org/sparql> { 
+			wd:Q12418 wdt:P276/wdt:P361* ?museum . 
+			?museum wdt:P131 ?geolocation . 
+			?geolocation rdfs:label ?label . 
+			FILTER (LANG(?label) = "en")
+		} 
+		SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#openstreetmap-geo> { 
+			?result osm:hasSearchTerm ?label . 
+			?result osm:wktGeotext ?wkt . 
+		} 
+		FILTER(STRSTARTS(STR(?wkt), "POINT")) 
+	} LIMIT 1 '
+        fix-zoom-level=13
+        tuple-template='<b>{{label.value}}</b>'
+      >
+      </semantic-map>
+
+    </div>
+
+
   </div>
 </div>

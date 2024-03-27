@@ -15,7 +15,7 @@ osm:openstreetmap-geo a ephedra:Service ;
 		[
 			sp:subject :_result ;
 			sp:predicate osm:hasSearchTerm ;
-			sp:object :_city
+			sp:object :_q
 		]
 		[
 			sp:subject :_result ;
@@ -44,15 +44,15 @@ osm:openstreetmap-geo a ephedra:Service ;
 		]
 		[
 			sp:subject :_result ;
-			sp:predicate osm:wikidataID ;
-			sp:object :_wikidataID
+			sp:predicate osm:cityName ;
+			sp:object :_cityName
 		]
 	) ;
 	spin:constraint
 	[
 		a spl:Argument ;
 		rdfs:comment "search term" ;
-		spl:predicate :_city ;
+		spl:predicate :_q ;
 		spl:valueType xsd:string
 	] ;
 	spin:constraint
@@ -106,8 +106,8 @@ osm:openstreetmap-geo a ephedra:Service ;
 	spin:column
 	[
 		a spin:Column ;
-		rdfs:comment "wikidataID" ;
-		spl:predicate :_wikidataID ;
-		ephedra:jsonPath "$.extratags.wikidata" ;
+		rdfs:comment "cityName" ;
+		spl:predicate :_cityName ;
+		ephedra:jsonPath "$.extratags.contact:city" ;
 		spl:valueType xsd:string
 	] .
