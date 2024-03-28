@@ -15,7 +15,35 @@
     <li>Additional <semantic-link iri="http://help.metaphacts.com/resource/TemplatesAndTemplating">helper</semantic-link> to show the current date and time: [[exampleDateTime]]</li>
     <li>A REST endpoint <a href="/rest/extension/custom/connection-check">/rest/extension/custom/connection-check</a> which performs a simple SPARQL query on the default repository</li>
     <li>A HTML5 component saying hello: <hello-from-app name="metaphacts"></hello-from-app></li>
+    <li>A <semantic-link iri='{{page-resource}}' fragment='dynamic-permission-provider-for-assets'>dynamic permission provider for assets</semantic-link> which reads permissions from a property file</li>
     </ul>
    
+    <h2 id="dynamic-permission-provider-for-assets">Dynamic permission provider for assets</h2>
+
+    <p>The property file to configure the provider must reside in <code>config/dynamicPermissions.prop</code> of the configured security storage (see <semantic-link iri='Help:BasicSystemConfiguration'>securityConfigStorageId</semantic-link>). Note that the securityConfigStorageId is not configured by default.</p>
+
+    <p>Here is an example of such a property file:</p>
+
+    <mp-code-block>
+myOntology.iri=https://ontologies.metaphacts.com/owner-test/0.1
+myOntology.userName=tester
+myOntology.roles=owner,author
+myOntology.type=Ontology
+
+myVocabulary.iri=https://vocabularies.metaphacts.com/owner-test/0.1
+myVocabulary.userName=tester
+myVocabulary.roles=owner
+myVocabulary.type=Vocabulary
+
+myOntology2.iri=https://ontologies.metaphacts.com/author-test/0.1
+myOntology2.userName=tester
+myOntology2.roles=author
+myOntology2.type=Ontology
+
+myVocabulary2.iri=https://vocabularies.metaphacts.com/author-test/0.1
+myVocabulary2.userName=tester
+myVocabulary2.roles=author
+myVocabulary2.type=Vocabulary
+    </mp-code-block>
   </div>
 </div>

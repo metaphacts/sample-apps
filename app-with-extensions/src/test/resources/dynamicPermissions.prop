@@ -1,0 +1,26 @@
+tester.invalidProperty=invalid value
+
+myOntology.iri=https://ontologies.metaphacts.com/owner-test/0.1
+myOntology.userName=alice
+myOntology.roles=owner,author
+myOntology.type=Ontology
+
+myVocabulary.iri=https://vocabularies.metaphacts.com/owner-test/0.1
+myVocabulary.userName=bob
+myVocabulary.roles=owner
+myVocabulary.type=Vocabulary
+
+myOntology2.iri=https://ontologies.metaphacts.com/author-test/0.1
+myOntology2.userName=frank
+myOntology2.roles=author
+myOntology2.type=Ontology
+
+myVocabulary2.iri=https://vocabularies.metaphacts.com/author-test/0.1
+myVocabulary2.userName=john@example.com
+myVocabulary2.roles=author
+myVocabulary2.type=Vocabulary
+
+myOntology3.iri=https://ontologies.metaphacts.com/author-test/0.1
+myOntology3.userName=peter@example.com
+myOntology3.roles=author
+myOntology3.type=oNtOlOgY
