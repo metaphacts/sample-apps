@@ -1,7 +1,7 @@
 /*
  * Platform SDK definiton
  *
- * (c) 2023 metaphacts GmbH
+ * (c) 2024 metaphacts GmbH
  *
  * This script is assumed to be included into the root project
  */
@@ -91,7 +91,7 @@ configure(project(':jetty')) {
 	}
 	
 	ext {
-		JETTY_VERSION = '11.0.18'
+		JETTY_VERSION = '11.0.20'
 	}
 	
 	dependencies {
@@ -119,6 +119,7 @@ configure(project(':jetty')) {
 		inplaceMode='hard'
 		contextPath=''
 		httpPort=10214
+		jetty11Version = JETTY_VERSION
 		
 		jvmArgs = []
 		
