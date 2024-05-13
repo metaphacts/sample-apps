@@ -1,0 +1,13 @@
+{
+  "name": "end-to-end-testing-with-cypress",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "cypress": "npx cypress open",
+    "headless": "cypress run -- --record --spec cypress/support/e2e.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.2",
+    "eslint": "^7.23.0"
+  }
+}
