@@ -29,7 +29,6 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
-import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
@@ -68,7 +67,7 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
     }
 
     @Override
-    protected CloseableIteration<? extends BindingSet, QueryEvaluationException> evaluateInternal(TupleExpr tuple,
+    protected CloseableIteration<? extends BindingSet> evaluateInternal(TupleExpr tuple,
             Dataset dataset, BindingSet bindings, boolean includeInferred) throws SailException {
 
         TupleExpr cloned = tuple.clone();
@@ -136,7 +135,7 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
                 }
 
                 // Note: we need to materialize the result as the MemoryStore is only temporary
-                return new CollectionIteration<BindingSet, QueryEvaluationException>(Iterations
+                return new CollectionIteration<BindingSet>(Iterations
                         .asList(conn.evaluate(info.getQueryExpression(), dataset, bindings, includeInferred)));
             }
         } finally {
@@ -338,12 +337,12 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
     }
 
     @Override
-    protected CloseableIteration<? extends Resource, SailException> getContextIDsInternal() throws SailException {
+    protected CloseableIteration<? extends Resource> getContextIDsInternal() throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
 
     @Override
-    protected CloseableIteration<? extends Statement, SailException> getStatementsInternal(Resource subj, IRI pred,
+    protected CloseableIteration<? extends Statement> getStatementsInternal(Resource subj, IRI pred,
             Value obj, boolean includeInferred, Resource... contexts) throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
@@ -379,7 +378,7 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
     }
 
     @Override
-    protected CloseableIteration<? extends Namespace, SailException> getNamespacesInternal() throws SailException {
+    protected CloseableIteration<? extends Namespace> getNamespacesInternal() throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
 
@@ -398,11 +397,6 @@ public class LinkedDataDocumentServiceSailConnection extends AbstractSailConnect
 
     @Override
     protected void clearNamespacesInternal() throws SailException {
-    }
-
-    @Override
-    public boolean pendingRemovals() {
-        return false;
     }
 
 }

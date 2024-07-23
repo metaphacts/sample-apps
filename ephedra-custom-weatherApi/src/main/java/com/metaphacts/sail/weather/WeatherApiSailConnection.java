@@ -33,7 +33,6 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
-import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.optimizer.BindingAssignerOptimizer;
@@ -76,7 +75,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
     }
 
     @Override
-    protected CloseableIteration<? extends BindingSet, QueryEvaluationException> evaluateInternal(TupleExpr tupleExpr,
+    protected CloseableIteration<? extends BindingSet> evaluateInternal(TupleExpr tupleExpr,
             Dataset dataset, BindingSet bindings, boolean includeInferred) throws SailException {
         TupleExpr cloned = tupleExpr.clone();
         new BindingAssignerOptimizer().optimize(cloned, dataset, bindings);
@@ -87,7 +86,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
         return executeAndConvertResultsToBindingSet(weatherConfig);
     }
 
-    protected CloseableIteration<? extends BindingSet, QueryEvaluationException> executeAndConvertResultsToBindingSet(
+    protected CloseableIteration<? extends BindingSet> executeAndConvertResultsToBindingSet(
             WeatherApiConfig weatherApiConfig) {
 
 
@@ -152,7 +151,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
     }
 
     @SuppressWarnings("unchecked")
-    protected CloseableIteration<? extends BindingSet, QueryEvaluationException> consumeResult(HttpResponse response,
+    protected CloseableIteration<? extends BindingSet> consumeResult(HttpResponse response,
             InputStream in, WeatherApiConfig cfg) throws IOException {
 
         List<BindingSet> res = new ArrayList<>();
@@ -196,7 +195,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
             throw new SailException("Failed to read document structure: " + e.getMessage(), e);
         }
 
-        return new CollectionIteration<BindingSet, QueryEvaluationException>(res);
+        return new CollectionIteration<BindingSet>(res);
     }
 
     protected Literal toLiteral(Object object) {
@@ -302,12 +301,12 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
     }
 
     @Override
-    protected CloseableIteration<? extends Resource, SailException> getContextIDsInternal() throws SailException {
+    protected CloseableIteration<? extends Resource> getContextIDsInternal() throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
 
     @Override
-    protected CloseableIteration<? extends Statement, SailException> getStatementsInternal(Resource subj, IRI pred,
+    protected CloseableIteration<? extends Statement> getStatementsInternal(Resource subj, IRI pred,
             Value obj, boolean includeInferred, Resource... contexts) throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
@@ -343,7 +342,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
     }
 
     @Override
-    protected CloseableIteration<? extends Namespace, SailException> getNamespacesInternal() throws SailException {
+    protected CloseableIteration<? extends Namespace> getNamespacesInternal() throws SailException {
         return new CollectionIteration<>(Collections.emptyList());
     }
 
@@ -362,11 +361,6 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
 
     @Override
     protected void clearNamespacesInternal() throws SailException {
-    }
-
-    @Override
-    public boolean pendingRemovals() {
-        return false;
     }
 
 }
