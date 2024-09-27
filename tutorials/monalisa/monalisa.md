@@ -366,7 +366,6 @@ The result of this query is applied in the metaphactory platform to display the 
 			?result osm:hasSearchTerm ?label . 
 			?result osm:wktGeotext ?wkt . 
 		} 
-		FILTER(STRSTARTS(STR(?wkt), "POINT")) 
 	} LIMIT 1 '
 fix-zoom-level=13
 tuple-template='<b>{{label.value}}</b>'>  
