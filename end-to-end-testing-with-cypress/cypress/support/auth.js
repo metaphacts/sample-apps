@@ -1,6 +1,6 @@
 //SESSION AUTH
 export const useSessionAuth = (sessionId) => {
-    cy.setCookie('JSESSIONID', SESSIONID)
+    cy.setCookie('JSESSIONID', sessionId)
 }
 //END SESSION AUTH
 
@@ -12,11 +12,15 @@ export const useFormAuth = (user, pass) => {
 //END FORM AUTH
 
 //Generic login command, handles session or form auth currently
-Cypress.Commands.add('login', (type, params) => {
+Cypress.Commands.add('login', () => {
+    const type = Cypress.env('authType');
+    const user = Cypress.env('user');
+    const pass = Cypress.env('password');
+    const sessionId = Cypress.env('sessionId');
     if (type === 'form') {
-        useFormAuth(params.user, params.pass);
+        useFormAuth(user, pass);
     }
     if (type === 'session') {
-        useSessionAuth(params.sessionId)
+        useSessionAuth(sessionId);
     }
-})
+});

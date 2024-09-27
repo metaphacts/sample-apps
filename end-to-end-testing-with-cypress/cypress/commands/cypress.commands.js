@@ -8,4 +8,4 @@ Cypress.Commands.overwrite(
         }
         return originalFn(subject);
     }
-)
+);

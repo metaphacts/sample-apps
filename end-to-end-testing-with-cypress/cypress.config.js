@@ -12,7 +12,8 @@ module.exports = defineConfig({
         user: 'admin',
         password: 'admin',
         //'form' or 'session'
-        authType: 'form'
+        authType: 'form',
+        // sessionId: ''
     },
     video: true,
     retries: {
