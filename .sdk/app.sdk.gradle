@@ -60,6 +60,8 @@ task deploy(type: Copy) {
 	doFirst {
 		delete project.file('target/deploy')
 	}
+	// avoid copying issues with local libs (which are also on the classpath)
+	duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
 task appZip(type: Zip, dependsOn: 'deploy') {
