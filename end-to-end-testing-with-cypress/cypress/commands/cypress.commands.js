@@ -8,4 +8,83 @@ Cypress.Commands.overwrite(
         }
         return originalFn(subject);
     }
-);
+)
+
+//Rewrite resource-link-container links to append publicPath of server
+Cypress.Commands.overwriteQuery('get', function (originalFn, ...args) {
+  const publicPath = Cypress.env('publicPath');
+  if(publicPath && publicPath.length === 0){
+    return originalFn.apply(this, args)
+  }
+  if(args[0].includes('mp-resource-link-container')){
+    args[0] = args[0].replace('mp-resource-link-container-/resource/', 'mp-resource-link-container-/' + publicPath + '/resource/');
+  }
+  if(args[0].includes('resource-link-')){
+    args[0] = args[0].replace('resource-link-/resource/', 'resource-link-/' + publicPath + '/resource/');
+  }
+  return originalFn.apply(this, args)
+})
+
+
+Cypress.Commands.add("createOntology", (ontologyName) => {
+  cy.get('[testid=bs-nav-dropdown-assets]').click();
+  cy.get('[data-testid=\'mp-resource-link-container-/resource/Assets:Ontologies\']').click();
+  cy.get('.btnCreateOntology').click();
+  cy.get('.CreateAsset--input').type(ontologyName);
+  cy.get('[data-testid=\'custom-checkbox-input\']').click();
+  cy.get('.CreateNewOntologyVersion--row > .form-control').clear().type('https://ontologies.metaphacts.com/' + ontologyName.replace(' ', '-') + '/0.1');
+  //TODO: Cache invalidation intermittently fails when we don't save to git, revisit in future
+  // cy.get('.SaveToGit--checkBoxOption > .form-check > .form-check-label').click();
+  cy.get('.CreateAsset--buttons > .btn-primary').click();
+});
+
+Cypress.Commands.add("deleteOntology", ontologyName => {
+  const assetIri = encodeURIComponent('https://ontologies.metaphacts.com/' + ontologyName.replace(' ', '-') + '/0.1');
+  cy.visit(Cypress.env('url') + '/resource/Assets:Ontologies');
+  cy.request({url: Cypress.env('url') + '/rest/assets/delete?assetIri=' + assetIri + '&deleteDiagrams=true', method: 'POST'}).then(response => {
+  });
+});
+
+/**
+ * In order to use this function, the test:Events page from the mp-integration app should be
+ * configured on the server being tested against
+ */
+Cypress.Commands.add('assertEventExists', (event, retries) => {
+  const defaultOptions = {
+    retries: 5,
+    waitAfterRefresh: 2500,
+  };
+
+  const options = { ...defaultOptions, ...retries };
+
+  cy.visit(Cypress.env('url') + '/resource/test:Events');
+
+  const selector = '[data-testid=\'event-' + event + '\']';
+
+  function check(event) {
+    if (Cypress.$(selector).length) { // Element is there
+      return cy.get('[data-testid=\'event-' + event + '\']').should('have.text', event);
+    }
+    if (options.retries === 0) {
+      throw Error(`${selector}'} not found`);
+    }
+    options.retries -= 1;
+    cy.log(`Element ${selector} not found. Remaining attempts: ${options.retries}`);
+    cy.reload();
+    // Wait some time for the server to respond
+    return cy.wait(options.waitAfterRefresh).then(() => check(event));
+  }
+
+  check(event);
+});
+
+Cypress.Commands.add("useTokenAuth", () => {
+  const authType = Cypress.env('authType');
+  const authToken = Cypress.env('authToken');
+  cy.intercept("*", (req) => {
+    if ((authType === 'authToken') && (authToken !== undefined)) {
+      console.log('using auth token');
+      req.headers['Authorization'] = 'Bearer ' + authToken;
+    }
+  })
+});

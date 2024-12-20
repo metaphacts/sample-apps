@@ -8,6 +8,7 @@ module.exports = defineConfig({
     env: {
         //replace this with your own metaphacts url
         url: 'http://localhost:10214',
+        publicPath: '',
         //if using form auth, user and password should be filled out
         user: 'admin',
         password: 'admin',
