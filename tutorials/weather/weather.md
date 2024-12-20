@@ -22,7 +22,7 @@ Another of such use cases is the weather forecast: given the coordinates it is p
 
 For this tutorial we make use of the [Dark Sky](https://darksky.net/poweredby/) API.
 
-In the following we describe the configuration and use case to display a weather forecast in the metphactory platform.
+In the following we describe the configuration and use case to display a weather forecast in the metaphactory platform.
 
 
 ## Implementation of Weather API wrapper
@@ -237,7 +237,7 @@ In the query we see that the geo coordinates are retrieved using the wikidata pr
 
 The resulting coordinates are then passed into the SERVICE which accesses the _weather-api_ repository through the ephedra federation. 
 
-We again use the _semantic query_ visualization component with a template, similary to the example described above.
+We again use the _semantic query_ visualization component with a template, similarly to the example described above.
 
 ```
 [[#> "Template:http://wikidata.org/ontology/Item" customTabs=true]]

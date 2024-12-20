@@ -215,7 +215,7 @@ _Note: this example requires the wikidata app being installed in the metaphactor
 
 In the following we provide an integrated and more visual example of how the data from DBLP can be combined with information from the Wikidata knowledge graph.
 
-Let's assume we use the wikidata SPARQL endpoint as our default repository. When navigating to a wikidata resource (say '_wd:Q23831639_', which is the Wikidata identifier of Peter Haase) we can make use of the platform's templating mechanims, and for instance display additional information such as the publications and co-authors as tabs.
+Let's assume we use the wikidata SPARQL endpoint as our default repository. When navigating to a wikidata resource (say '_wd:Q23831639_', which is the Wikidata identifier of Peter Haase) we can make use of the platform's templating mechanisms, and for instance display additional information such as the publications and co-authors as tabs.
 
 The result may look as follows:
 

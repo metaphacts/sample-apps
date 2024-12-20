@@ -113,7 +113,7 @@ The provided `Dockerfile` is expected to be in the root folder of the project. T
 2. build the container with apps use the following command (note the `.` at the end of the command!):
 
 ```
-docker build --build-arg METAPHACTORY_VERSION=5.5.0 -t metaphactory-with-apps:5.5.0 .
+docker build --build-arg METAPHACTORY_VERSION=5.6.0 -t metaphactory-with-apps:5.6.0 .
 ```
 
 See the reference of the [docker build command](https://docs.docker.com/reference/cli/docker/buildx/build/) for all available arguments.
@@ -137,7 +137,7 @@ metaphactory-with-apps   latest    6ef60382ad62   19 hours ago   1.19GB
 4. To run the container with the app `myapp` for local testing use the following command:
 
 ```
-docker run --detach --publish 10214:8080 --env MP_APP_1=/installedapps/myapp --name metaphactory-test metaphactory-with-apps:5.5.0
+docker run --detach --publish 10214:8080 --env MP_APP_1=/installedapps/myapp --name metaphactory-test metaphactory-with-apps:5.6.0
 ```
 
 Note: multiple apps can be activated by adding multiple environment variables. Alternatively, this can be done directly in the `Dockerfile`, see the comments at the bottom of the file.
@@ -157,7 +157,7 @@ The build steps described above will create a metaphactory image with the apps "
 1. create (but don't run) a temporary container based on the image created above:
 
 ```
-docker create --name image-with-apps metaphactory-with-apps:5.5.0
+docker create --name image-with-apps metaphactory-with-apps:5.6.0
 ```
 
 2. copy the app files from the container to the local file system into the current folder:

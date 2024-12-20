@@ -1,11 +1,11 @@
 project.ext {
-	RDF4J_VERSION = "5.0.1"
+	RDF4J_VERSION = "5.1.0"
 	JERSEY_VERSION = "3.1.7"
 	SHIRO_VERSION = "1.13.0"
-	JACKSON_VERSION = "2.17.2"
-	GUAVA_VERSION = "33.2.1-jre"
-	LOG4J_VERSION = "2.23.1"
-	SLF4J_VERSION = "2.0.12"
+	JACKSON_VERSION = "2.18.2"
+	GUAVA_VERSION = "33.3.1-jre"
+	LOG4J_VERSION = "2.24.2"
+	SLF4J_VERSION = "2.0.16"
 }
 dependencies {
 
@@ -64,12 +64,12 @@ dependencies {
 	compileOnly group: 'org.slf4j', name: 'slf4j-api', version: SLF4J_VERSION, transitive: false
 	compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: LOG4J_VERSION, transitive: false
 	compileOnly group: 'com.google.guava', name: 'guava', version: GUAVA_VERSION, transitive: false
-	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13', transitive: false
+	compileOnly group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14', transitive: false
 	compileOnly group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14', transitive: false
 	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: JACKSON_VERSION, transitive: false
 	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: JACKSON_VERSION, transitive: false
 	compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: JACKSON_VERSION, transitive: false
-	compileOnly group: 'org.pf4j', name: 'pf4j', version: '3.10.0'
+	compileOnly group: 'org.pf4j', name: 'pf4j', version: '3.12.0'
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-server', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-client', version: JERSEY_VERSION
 	compileOnly group: 'org.glassfish.jersey.core', name: 'jersey-common', version: JERSEY_VERSION
@@ -85,12 +85,12 @@ dependencies {
 	compileOnly group: 'jakarta.enterprise', name: 'jakarta.enterprise.cdi-api', version: '3.0.1'
 	compileOnly group: 'jakarta.inject', name: 'jakarta.inject-api', version: '2.0.1'
 
-	compileOnly group: 'commons-io', name: 'commons-io', version: '2.11.0', transitive: false
+	compileOnly group: 'commons-io', name: 'commons-io', version: '2.18.0', transitive: false
 	compileOnly group: 'commons-logging', name: 'commons-logging', version: '1.2', transitive: false
-	compileOnly group: 'commons-codec', name: 'commons-codec', version: '1.15', transitive: false
+	compileOnly group: 'commons-codec', name: 'commons-codec', version: '1.17.1', transitive: false
 	compileOnly "org.glassfish.jaxb:jaxb-runtime:2.3.3"
 	
-	compileOnly group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.8', transitive: false
+	compileOnly group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.20', transitive: false
 
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

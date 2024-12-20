@@ -66,7 +66,7 @@ public class CustomQueryEndpoint implements RestExtension {
             }
         }
         catch (IllegalArgumentException e) {
-            return Response.status(404).entity("respository does not exist").build();
+            return Response.status(404).entity("repository does not exist").build();
         }
 
     }

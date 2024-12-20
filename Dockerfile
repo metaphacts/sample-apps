@@ -1,4 +1,4 @@
-ARG METAPHACTORY_VERSION=5.5.0
+ARG METAPHACTORY_VERSION=5.6.0
 ARG METAPHACTORY_IMAGE=metaphacts/metaphactory
 ARG GRADLE_VERSION=8-jdk17
 
@@ -53,7 +53,7 @@ COPY --from=app-builder --chown=jetty:root /tmp/build/installedapps /installedap
 
 
 # to build the container with apps use the following command:
-# docker build --build-arg METAPHACTORY_VERSION=5.5.0 -t metaphactory-with-apps:5.5.0 .
+# docker build --build-arg METAPHACTORY_VERSION=5.6.0 -t metaphactory-with-apps:5.6.0 .
 # to run the container with one example app use the following command:
 # docker run --detach --publish 10214:8080 --env MP_APP_1=/installedapps/eventsubscriber-example --name metaphactory-test metaphactory-with-apps
 # to inspect the container created using the previous command use the following command:

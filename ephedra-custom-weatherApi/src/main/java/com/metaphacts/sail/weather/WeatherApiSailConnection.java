@@ -146,7 +146,7 @@ public class WeatherApiSailConnection extends AbstractSailConnection {
 
     protected void validateResponse(HttpResponse response, int responseCode, StatusLine statusLine) throws IOException {
         if (responseCode != 200) {
-            throw new IOException("Unpexted response: " + responseCode);
+            throw new IOException("Unexpected response: " + responseCode);
         }
     }
 
