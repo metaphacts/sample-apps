@@ -36,6 +36,15 @@ task unzipWar(type: Copy) {
 	from zipTree(zipFile)
 	into outputDir
 	
+	// WORKAROUND
+	// To support Jetty 11 in Gretty, while having our webapp prepared for Jetty 12 with EE9
+	// we replace respective class references in web.xml and jetty-env.xml
+	filesMatching ('WEB-INF/*.xml') , {
+		filter { String line ->
+			line.replace('ee9.', '');
+		}
+	}
+	
 	doFirst {
 		logger.lifecycle("Extracting platform WAR binary from " + file(platformWar))
 	}
