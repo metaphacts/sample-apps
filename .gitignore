@@ -11,3 +11,15 @@ gradle.properties
 ephedra-sql-dvdrental/dvdrental-postgres/dvdrental.tar
 platform-*
 .DS_Store
+
+# SDK related files
+.sdk
+build.gradle
+Dockerfile
+gradle
+gradlew
+gradlew.bat
+metaphactory-release
+metaphactory-release.war
+README-SDK.md
+settings.gradle
