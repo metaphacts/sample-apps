@@ -2,7 +2,7 @@ version: "2.2"
 services:
   postgres-dvdrental:
     container_name: "postgres-dvdrental"
-    image: postgres:12-alpine
+    image: postgres:17-alpine
     restart: always
     ports:
       - 5432:5432

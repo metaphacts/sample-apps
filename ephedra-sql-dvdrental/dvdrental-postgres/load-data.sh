@@ -7,7 +7,7 @@ cd /postgres-setup
 FILE=/postgres-setup/dvdrental.tar
 if [ ! -f "$FILE" ]; then
     echo "Dowloading $FILE from the postgres tutorial."
-    wget http://www.postgresqltutorial.com/wp-content/uploads/2019/05/dvdrental.zip
+    wget https://neon.tech/postgresqltutorial/dvdrental.zip
     unzip dvdrental.zip
     rm dvdrental.zip
 fi

@@ -1,25 +1,28 @@
-@prefix mph: <http://www.metaphacts.com/ontologies/platform/repository#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rep: <http://www.openrdf.org/config/repository#> .
-@prefix sail: <http://www.openrdf.org/config/sail#> .
-@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix search: <http://www.metaphacts.com/ontologies/platform/service/search/> .
+@prefix pathfinder: <http://www.metaphacts.com/ontologies/platform/service/pathfinder/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix config: <tag:rdf4j.org,2023:config/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix mph: <http://www.metaphacts.com/ontologies/platform/repository#> .
 @prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
 
-[] a rep:Repository;
-  rep:repositoryID "dvdrental-sql";
-  rep:repositoryImpl [
-      rep:repositoryType "openrdf:SailRepository";
-      sr:sailImpl [
-          ephedra:implementsService ephedra:dvdrental-sql ;
-          ephedra:serviceURL "jdbc:postgresql://localhost:5432/dvdrental" ;
-          mph:password "${repository.dvdrental.password:postgres}";
+[] a config:Repository;
+  config:rep.id "dvdrental-sql";
+  rdfs:label "A wrapper for the SQL test repository.";
+  config:rep.impl [
+      config:rep.type "openrdf:SailRepository";
+      config:sail.impl [
+          config:sail.type "metaphacts:SQL";
+          ephedra:serviceURL "jdbc:postgresql://localhost:5432/dvdrental";
+          ephedra:implementsService <urn:service:dvdrental-sql>;
           mph:username "${repository.dvdrental.username:postgres}";
+          mph:password "${repository.dvdrental.password:postgres}";
           <http://www.metaphacts.com/ontologies/sql#hasConnectionProperty> [
               <http://www.metaphacts.com/ontologies/sql#name> "connectTimeout";
               <http://www.metaphacts.com/ontologies/sql#value> "2000"
-            ];
-          sail:sailType "metaphacts:SQL"
+            ], [
+              <http://www.metaphacts.com/ontologies/sql#name> "poolPreparedStatements";
+              <http://www.metaphacts.com/ontologies/sql#value> "true"
+            ]
         ]
-    ];
-  rdfs:label "A wrapper for the SQL test repository." .
+    ] .

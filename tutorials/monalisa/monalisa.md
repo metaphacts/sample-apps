@@ -86,119 +86,120 @@ Navigate to _"/resource/Admin:EphedraServices"_ in your metaphactory installatio
 
 
 ```
-PREFIX sp: <http://spinrdf.org/sp#>
-PREFIX spin: <http://spinrdf.org/spin#>
-PREFIX spl: <http://spinrdf.org/spl#>
-PREFIX osm: <http://www.metaphacts.com/ontologies/osm#>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX sail: <http://www.openrdf.org/config/sail#>
-PREFIX : <http://www.metaphacts.com/ontologies/platform/service/custom#>
+@prefix sp: <http://spinrdf.org/sp#> .
+@prefix spin: <http://spinrdf.org/spin#> .
+@prefix spl: <http://spinrdf.org/spl#> .
+@prefix osm: <http://www.metaphacts.com/ontologies/osm#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
+@prefix service-config: <http://www.metaphacts.com/ontologies/platform/service/config/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix : <http://www.metaphacts.com/ontologies/platform/service/custom#> .
 
-osm:openstreetmap-geo a ephedra:Service ;
-	rdfs:label "A wrapper for the OpenStreetMap service." ; 
-	sail:sailType "metaphacts:RESTService" ;
-	ephedra:hasSPARQLPattern (
-		[
-			sp:subject :_result ;
-			sp:predicate osm:hasSearchTerm ;
-			sp:object :_q
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate osm:polygonText ;
-			sp:object :_polygon_text
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate osm:format ;
-			sp:object :_format
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate osm:extratags ;
-			sp:object :_extratags
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate rdfs:label ;
-			sp:object :_display_name
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate osm:wktGeotext ;
-			sp:object :_geotext
-		]
-		[
-			sp:subject :_result ;
-			sp:predicate osm:cityName ;
-			sp:object :_cityName
-		]
-	) ;
-	spin:constraint
-	[
-		a spl:Argument ;
-		rdfs:comment "search term" ;
-		spl:predicate :_q ;
-		spl:valueType xsd:string
-	] ;
-	spin:constraint
-	[
-		a spl:Argument ;
-		rdfs:comment "polygon text flag" ;
-		spl:predicate :_polygon_text ;
-		spl:defaultValue "1"^^xsd:integer ;
-		spl:valueType xsd:integer
-	] ;
-	spin:constraint
-	[
-		a spl:Argument ;
-		rdfs:comment "format" ;
-		spl:predicate :_format ;
-		spl:defaultValue "json" ;
-		spl:valueType xsd:string
-	] ;
-	spin:constraint
-	[
-		a spl:Argument ;
-		rdfs:comment "extra tags flag" ;
-		spl:predicate :_extratags ;
-		spl:defaultValue "1"^^xsd:integer ;
-		spl:valueType xsd:integer
-	] ;
-	spin:column
-	[
-		a spin:Column ;
-		rdfs:comment "result" ;
-		spl:predicate :_result ;
-		spl:valueType rdfs:Resource;
-		ephedra:jsonPath "$"
-	] ;
-	spin:column
-	[
-		a spin:Column ;
-		rdfs:comment "display name" ;
-		spl:predicate :_display_name ;
-		spl:valueType xsd:string;
-		ephedra:jsonPath "$.display_name"
-	] ;
-	spin:column
-	[
-		a spin:Column ;
-		rdfs:comment "geotext" ;
-		spl:predicate :_geotext ;
-		ephedra:jsonPath "$.geotext" ;
-		spl:valueType geo:wktLiteral
-	] ;
-	spin:column
-	[
-		a spin:Column ;
-		rdfs:comment "cityName" ;
-		spl:predicate :_cityName ;
-		ephedra:jsonPath "$.extratags.contact:city" ;
-		spl:valueType xsd:string
-	] .
+osm:openstreetmap-geo a service-config:Service, ephedra:RESTService ;
+    rdfs:label "A wrapper for the OpenStreetMap service." ; 
+    sail:sailType "metaphacts:RESTService" ;
+    ephedra:hasSPARQLPattern (
+        [
+            sp:subject :_result ;
+            sp:predicate osm:hasSearchTerm ;
+            sp:object :_q
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate osm:polygonText ;
+            sp:object :_polygon_text
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate osm:format ;
+            sp:object :_format
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate osm:extratags ;
+            sp:object :_extratags
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate rdfs:label ;
+            sp:object :_display_name
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate osm:wktGeotext ;
+            sp:object :_geotext
+        ]
+        [
+            sp:subject :_result ;
+            sp:predicate osm:cityName ;
+            sp:object :_cityName
+        ]
+    ) ;
+    spin:constraint
+    [
+        a spl:Argument ;
+        rdfs:comment "search term" ;
+        spl:predicate :_q ;
+        spl:valueType xsd:string
+    ] ;
+    spin:constraint
+    [
+        a spl:Argument ;
+        rdfs:comment "polygon text flag" ;
+        spl:predicate :_polygon_text ;
+        spl:defaultValue "1"^^xsd:integer ;
+        spl:valueType xsd:integer
+    ] ;
+    spin:constraint
+    [
+        a spl:Argument ;
+        rdfs:comment "format" ;
+        spl:predicate :_format ;
+        spl:defaultValue "json" ;
+        spl:valueType xsd:string
+    ] ;
+    spin:constraint
+    [
+        a spl:Argument ;
+        rdfs:comment "extra tags flag" ;
+        spl:predicate :_extratags ;
+        spl:defaultValue "1"^^xsd:integer ;
+        spl:valueType xsd:integer
+    ] ;
+    spin:column
+    [
+        a spin:Column ;
+        rdfs:comment "result" ;
+        spl:predicate :_result ;
+        spl:valueType rdfs:Resource;
+        ephedra:jsonPath "$"
+    ] ;
+    spin:column
+    [
+        a spin:Column ;
+        rdfs:comment "display name" ;
+        spl:predicate :_display_name ;
+        spl:valueType xsd:string;
+        ephedra:jsonPath "$.display_name"
+    ] ;
+    spin:column
+    [
+        a spin:Column ;
+        rdfs:comment "geotext" ;
+        spl:predicate :_geotext ;
+        ephedra:jsonPath "$.geotext" ;
+        spl:valueType geo:wktLiteral
+    ] ;
+    spin:column
+    [
+        a spin:Column ;
+        rdfs:comment "cityName" ;
+        spl:predicate :_cityName ;
+        ephedra:jsonPath "$.extratags.contact:city" ;
+        spl:valueType xsd:string
+    ] .
 ```
 
 This service descriptor tells Ephedra how the inputs and outputs are mapped from the SPARQL query terms to the request parameters and JSON fields of the actual REST API.
