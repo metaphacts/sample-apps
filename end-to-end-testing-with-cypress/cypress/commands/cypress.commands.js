@@ -13,7 +13,7 @@ Cypress.Commands.overwrite(
 //Rewrite resource-link-container links to append publicPath of server
 Cypress.Commands.overwriteQuery('get', function (originalFn, ...args) {
   const publicPath = Cypress.env('publicPath');
-  if(publicPath && publicPath.length === 0){
+  if(!publicPath || publicPath.length === 0){
     return originalFn.apply(this, args)
   }
   if(args[0].includes('mp-resource-link-container')){
@@ -32,7 +32,7 @@ Cypress.Commands.add("createOntology", (ontologyName) => {
   cy.get('.btnCreateOntology').click();
   cy.get('.CreateAsset--input').type(ontologyName);
   cy.get('[data-testid=\'custom-checkbox-input\']').click();
-  cy.get('.CreateNewOntologyVersion--row > .form-control').clear().type('https://ontologies.metaphacts.com/' + ontologyName.replace(' ', '-') + '/0.1');
+  cy.get('.AssetCreateNewVersion--row > .form-control').clear().type('https://ontologies.metaphacts.com/' + ontologyName.replace(' ', '-') + '/0.1');
   //TODO: Cache invalidation intermittently fails when we don't save to git, revisit in future
   // cy.get('.SaveToGit--checkBoxOption > .form-check > .form-check-label').click();
   cy.get('.CreateAsset--buttons > .btn-primary').click();
