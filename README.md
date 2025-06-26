@@ -23,7 +23,7 @@ Usage of prepareEnvironment.sh:
 OPTIONS:
   -f  force update of SDK, even if the metaphactory version did not change
   -h  display help
-  -i <îmage>  use custom docker image
+  -i <image>  use custom docker image
 Examples:
   - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:5.7.0"
 ```
