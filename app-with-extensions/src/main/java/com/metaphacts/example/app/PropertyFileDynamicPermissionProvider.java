@@ -42,8 +42,8 @@ import com.metaphacts.security.dynamic.AbstractCachedDynamicPermissionProvider;
 import com.metaphacts.security.dynamic.ContextObject;
 import com.metaphacts.security.dynamic.DynamicContextCache;
 import com.metaphacts.security.dynamic.DynamicPermissionProvider;
-import com.metaphacts.services.assets.OntologyAsset;
-import com.metaphacts.services.assets.VocabularyAsset;
+import com.metaphacts.services.assets.OntologyAssetType;
+import com.metaphacts.services.assets.VocabularyAssetType;
 import com.metaphacts.services.storage.api.ObjectKind;
 import com.metaphacts.services.storage.api.ObjectRecord;
 import com.metaphacts.services.storage.api.PlatformStorage;
@@ -249,8 +249,8 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
     }
 
     private static String toAssetType(String val) {
-        return val.equalsIgnoreCase(OntologyAsset.TYPE_NAME) ? "ontology"
-                : val.equalsIgnoreCase(VocabularyAsset.TYPE_NAME) ? "vocabulary" : null;
+        return val.equalsIgnoreCase(OntologyAssetType.TYPE_NAME) ? "ontology"
+                : val.equalsIgnoreCase(VocabularyAssetType.TYPE_NAME) ? "vocabulary" : null;
     }
     
     /**
