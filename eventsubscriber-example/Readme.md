@@ -25,4 +25,4 @@ A custom extension could make this extensible, e.g., to allow configuration for 
 
 ## Configuration & Prerequisites
 
-Please note that in order to be able to actually send emails or notifications, this app needs an implementation of the `EmailService` or `NotificationService`. metaphactory provides the bundled app `aws-services` which can be used to send emails or notifications using AWS SES or SNS, respectively. See [AWS Services App](https://help.metaphacts.com/resource/Help:Events#aws-services-installation) for details.
+Please note that in order to be able to actually send emails or notifications, this app needs an implementation of the `EmailService` or `NotificationService`. metaphactory provides the bundled app `aws-services` which can be used to send emails or notifications using AWS SES or SNS, respectively. See [AWS Services App](https://help.metaphacts.com/resource/Help:Installation#bundled-apps) for details.
