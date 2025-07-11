@@ -1,0 +1,9 @@
+{
+  "components": {
+    "hello-from-app": {
+      "loadScripts": [
+        "/assets/components/hello-world-from-app.js"
+      ]
+    }
+  }
+}
