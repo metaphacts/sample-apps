@@ -8,6 +8,7 @@ Currently the following extensions are shown
 * Handlebars extension
 * Custom HTML5 component
 * Dynamic permission provider for assets based on a property file
+* Example for an EventDecorator for `OntologyReadyForReviewEvent`s
 
 The entry point is available on http://localhost:10214/resource/ex:AppExtensions
 
