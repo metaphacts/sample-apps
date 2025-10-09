@@ -7,7 +7,7 @@
 # Run "./prepareEnvironment.sh -h" to see usage.
 ################################################################################
 
-METAPHACTORY_DOCKER_IMAGE=metaphacts/metaphactory:5.8.0
+METAPHACTORY_DOCKER_IMAGE=metaphacts/metaphactory:5.9.0
 TIMESTAMP="$(date +%s)"
 CONTAINER_NAME="metaphactory-sdk-${TIMESTAMP}"
 TEMP_FOLDER="./tmp/${CONTAINER_NAME}"

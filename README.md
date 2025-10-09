@@ -25,7 +25,7 @@ OPTIONS:
   -h  display help
   -i <image>  use custom docker image
 Examples:
-  - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:5.8.0"
+  - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:5.9.0"
 ```
 
 ### Setting up the SDK manually
