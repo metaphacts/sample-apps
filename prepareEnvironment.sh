@@ -88,7 +88,14 @@ docker cp "${CONTAINER_NAME}:/var/lib/jetty/webapps/ROOT.war" "./metaphactory-re
 # Remove temporary container
 docker rm "${CONTAINER_NAME}" > /dev/null
 
-sed "s/platformLocation=.*/platformLocation=.\/metaphactory-release.war/" gradle.properties.template > gradle.properties
+# Only overwrite gradle.properties if it doesn't exist or force mode is active
+if [ ! -e "./gradle.properties" ] || [ -n "${FORCE}" ]
+then
+	sed "s/platformLocation=.*/platformLocation=.\/metaphactory-release.war/" gradle.properties.template > gradle.properties
+	echo "Created/updated gradle.properties from template"
+else
+	echo "Keeping existing gradle.properties (use -f to force update)"
+fi
 rm gradle.properties.template
 
 ./gradlew prepareEnvironment
