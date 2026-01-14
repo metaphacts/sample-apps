@@ -2,7 +2,7 @@
 //this is currently needed to address react-bootstrap component markup
 //ideally we would use data-testid everywhere, but some of the bootstrap components
 //do not want to pass that 'data-' attribute through with the 'data-' part still appended
-Cypress.SelectorPlayground.defaults({
+Cypress.ElementSelector.defaults({
     onElement: ($el) => {
 
         //workaround for react select input selector
