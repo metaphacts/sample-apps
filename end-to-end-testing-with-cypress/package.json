@@ -7,7 +7,7 @@
     "headless": "cypress run -- --record --spec cypress/support/e2e.js"
   },
   "devDependencies": {
-    "cypress": "^15.8.2",
-    "eslint": "^9.39.2"
+    "cypress": "^15.12.0",
+    "eslint": "^10.1.0"
   }
 }
