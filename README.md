@@ -24,8 +24,11 @@ OPTIONS:
   -f  force update of SDK, even if the metaphactory version did not change
   -h  display help
   -i <image>  use custom docker image
+  -a <apps>   comma-separated list of bundled apps to copy from the container
+              into the current directory (e.g., -a ai-services,eia-physical-layer,eia-business-layer,enterprise-information-architecture)
 Examples:
   - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:5.11.0"
+  - with bundled apps:        "./prepareEnvironment.sh -a ai-services,eia-physical-layer,eia-business-layer,enterprise-information-architecture"
 ```
 
 ### Setting up the SDK manually
