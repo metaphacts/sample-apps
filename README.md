@@ -3,6 +3,10 @@
 This repository provides different kinds of tutorial as well as full working samples. Tutorials
 are grouped by topic and are organized on different levels of expertise.
 
+## Upgrading from earlier versions
+
+Sample apps in this repository now target the metaphactory 6.0 SDK, which moves the platform to Jakarta EE 11 (Jetty 12 EE11, RESTEasy as the JAX-RS runtime) and requires **JDK 25** for local development (previous releases required JDK 21). Apps that only consume the standard `jakarta.ws.rs.*` / `jakarta.inject.*` / `jakarta.enterprise.*` APIs continue to work without code changes — the `javax.* → jakarta.*` migration was completed back in metaphactory 5.0. Apps that previously depended on Jersey-internal classes (`org.glassfish.jersey.*`) need to be ported to standard JAX-RS or RESTEasy equivalents. See [`CHANGELOG.md`](CHANGELOG.md) for the full list of changes.
+
 ## App development and Deployment
 
 In order to develop apps with access to Java development extensions the metaphactory SDK is required to be set up.
@@ -25,7 +29,7 @@ OPTIONS:
   -h  display help
   -i <image>  use custom docker image
 Examples:
-  - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:5.11.0"
+  - with custom docker image: "./prepareEnvironment.sh -i metaphacts/metaphactory:6.0.0"
 ```
 
 ### Setting up the SDK manually
