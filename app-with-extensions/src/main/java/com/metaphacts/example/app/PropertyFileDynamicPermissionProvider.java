@@ -50,15 +50,15 @@ import com.metaphacts.services.storage.api.PlatformStorage;
 import com.metaphacts.services.storage.api.StoragePath;
 
 /**
- * {@link DynamicPermissionProvider} for asset (ontology, vocabulary) ownership and authorship permissions based on
- * configurations in property files.
+ * {@link DynamicPermissionProvider} for asset (ontology, vocabulary) ownership
+ * and authorship permissions based on configurations in property files.
  * 
  * <p>
- * The file {@value #PROPERTY_FILENAME} has to be located in the config folder of the registered security storage (see
- * {@link EnvironmentConfiguration#getSecurityConfigStorageId()} setting) and the provider has to be configured in the
- * environment configuration property for shiro dynamic permission providers (see
- * {@link EnvironmentConfiguration#getShiroDynamicPermissionProviders()). If no security storage is configured, this
- * provider does nothing. Permissions are only loaded once during startup. Therefore, permission changes require a
+ * The file {@value #PROPERTY_FILENAME} has to be located in the config folder
+ * of the registered security storage (see
+ * {@link EnvironmentConfiguration#getSecurityConfigStorageId()} setting). If no
+ * security storage is configured, this provider does nothing. Permissions are
+ * only loaded once during startup. Therefore, permission changes require a
  * restart of the platform.
  * </p>
  * 
@@ -105,7 +105,7 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
 
         String username = SecurityService.getUserName();
         PlatformRoleManager roleManager = ((MetaphactsSecurityManager) SecurityUtils.getSecurityManager())
-                .getPlatformRoleManager();
+            .getPlatformRoleManager();
 
         List<Permission> result = new ArrayList<>();
         assetRoleAssignments.stream().forEach(assetRoleAssignment -> {
@@ -130,7 +130,8 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
     }
 
     /**
-     * Import permission mappings from the property file {@value #PROPERTY_FILENAME}.
+     * Import permission mappings from the property file
+     * {@value #PROPERTY_FILENAME}.
      * 
      * @param platformStorage Injected {@link PlatformStorage} instance
      */
@@ -159,7 +160,7 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
         // Try to read permission property file from security storage
         if (securityConfigStorageId != null) {
             Optional<ObjectRecord> objectRecord = platformStorage.getStorage(securityConfigStorageId)
-                    .getObject(storagePath, null);
+                .getObject(storagePath, null);
             if (objectRecord.isEmpty()) {
                 logger.debug("No dynamic permission property file found in security storage");
                 return null;
@@ -167,7 +168,8 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
             logger.debug("Loading content of dynamic permission property file '{}'",
                     objectRecord.get().getPath().toString());
             return objectRecord.get().getLocation().readContent();
-        } else { // fallback if no security storage is configured => try to read property file from filesystem
+        } else { // fallback if no security storage is configured => try to read property file
+                 // from filesystem
             logger.debug("No security storage configured");
             File propertyFile = Paths.get(Configuration.getConfigBasePath() + PROPERTY_FILENAME).toFile();
             if (!propertyFile.exists()) {
@@ -189,12 +191,13 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
 
         int validAssetRoleAssignmentsCount = 0;
         Map<IRI, Set<AssetRoleAssignment>> resultMap = new HashMap<>();
-        // Filter out invalid property permissions and re-map them for easier lookup based on their asset IRI
+        // Filter out invalid property permissions and re-map them for easier lookup
+        // based on their asset IRI
         for (Entry<String, AssetRoleAssignment> assetRoleAssignmentEntry : propertyMappings.entrySet()) {
             AssetRoleAssignment assetRoleAssignment = assetRoleAssignmentEntry.getValue();
             if (assetRoleAssignment.isValid()) {
                 resultMap.computeIfAbsent(assetRoleAssignment.iri, k -> new HashSet<>())
-                        .add(assetRoleAssignment);
+                    .add(assetRoleAssignment);
                 validAssetRoleAssignmentsCount++;
             } else {
                 logger.trace("Invalid asset role assignment '{}' has been ignored",
@@ -238,13 +241,13 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
         AssetRoleAssignment assetRoleAssignment = mapping.getOrDefault(id, new AssetRoleAssignment());
         String subProperty = property.substring(idx + 1);
         switch (subProperty.toLowerCase()) {
-            case "iri" -> assetRoleAssignment.iri = Values.iri(val);
-            case "type" -> assetRoleAssignment.type = toAssetType(val);
-            case "username" -> assetRoleAssignment.username = val;
-            case "roles" -> assetRoleAssignment.roles = Role.toRoles(val);
-            default -> logger.warn("Unknown property: {}", subProperty);
+        case "iri" -> assetRoleAssignment.iri = Values.iri(val);
+        case "type" -> assetRoleAssignment.type = toAssetType(val);
+        case "username" -> assetRoleAssignment.username = val;
+        case "roles" -> assetRoleAssignment.roles = Role.toRoles(val);
+        default -> logger.warn("Unknown property: {}", subProperty);
         }
-        
+
         mapping.put(id, assetRoleAssignment);
     }
 
@@ -252,7 +255,7 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
         return val.equalsIgnoreCase(OntologyAssetType.TYPE_NAME) ? "ontology"
                 : val.equalsIgnoreCase(VocabularyAssetType.TYPE_NAME) ? "vocabulary" : null;
     }
-    
+
     /**
      * Helper class for asset role assignments.
      */
@@ -281,10 +284,11 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
         /**
          * Check if a {@link AssetRoleAssignment} has all of its fields set
          * 
-         * @return <code>true</code> if this is a valid {@link AssetRoleAssignment}, otherwise <code>false</code>
+         * @return <code>true</code> if this is a valid {@link AssetRoleAssignment},
+         *         otherwise <code>false</code>
          */
         private boolean isValid() {
-            return iri != null 
+            return iri != null
                     && type != null && !type.isBlank()
                     && username != null && !username.isBlank()
                     && roles != null && !roles.isEmpty();
@@ -299,35 +303,42 @@ public class PropertyFileDynamicPermissionProvider extends AbstractCachedDynamic
         OWNER, AUTHOR;
 
         /**
-         * Map this {@link Role} to its role fragment in the platform based on the given asset type.
+         * Map this {@link Role} to its role fragment in the platform based on the given
+         * asset type.
          * 
          * <p>
          * Example: OWNER(Role) + ontology(type) => ontology-admin
          * <p>
          * 
-         * @param type Type of the asset. Possible values: {@code ontology}, {@code vocabulary}
-         * @return a {@link String} containing the corresponding role fragment in the platform
+         * @param type Type of the asset. Possible values: {@code ontology},
+         *             {@code vocabulary}
+         * @return a {@link String} containing the corresponding role fragment in the
+         *         platform
          */
         String toRoleString(String type) {
             return switch (this) {
-                case OWNER -> type + "-admin";
-                case AUTHOR -> type + "-edit";
+            case OWNER -> type + "-admin";
+            case AUTHOR -> type + "-edit";
             };
         }
 
         /**
          * Parses a given {@link String} into a {@link Set} of {@link Role}s.
          * 
-         * @param roleString The {@link String} containing a comma-separated list of {@link ROLES} (case-insensitive)
-         * @return a {@link Set} of the parsed {@link Role}s or <code>null</code> if the roles are not parsable
+         * @param roleString The {@link String} containing a comma-separated list of
+         *                   {@link ROLES} (case-insensitive)
+         * @return a {@link Set} of the parsed {@link Role}s or <code>null</code> if the
+         *         roles are not parsable
          */
         static Set<Role> toRoles(String roleString) {
             if (roleString == null || roleString.isBlank()) {
                 return null;
             }
             try {
-                return Arrays.asList(roleString.split(",")).stream().map(v -> Role.valueOf(v.trim().toUpperCase()))
-                        .collect(Collectors.toSet());
+                return Arrays.asList(roleString.split(","))
+                    .stream()
+                    .map(v -> Role.valueOf(v.trim().toUpperCase()))
+                    .collect(Collectors.toSet());
             } catch (IllegalArgumentException e) {
                 logger.debug("{} can not be read as a role", roleString);
                 return null;

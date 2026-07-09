@@ -21,14 +21,8 @@ The provider is an extension example for dynamic permissions, see https://help.m
 
 ### Preparation
 
-* install this app metaphactory
+* install this app in metaphactory
 * create local users **sofia**, **tom** and **frank** in metaphactory with the role **knowledge-steward**
-* configure the `PropertyFileDynamicPermissionProvider` as `shiroDynamicPermissionProviders` in **config/environment.prop**:
-
-```
-shiroDynamicPermissionProviders=PropertyFileDynamicPermissionProvider
-```
-
 * configure dynamic permissions for the scenario in the file **config/dynamicPermissions.prop** (placed in the configured security storage, falling back to the regular runtime storage)
 
 ```
