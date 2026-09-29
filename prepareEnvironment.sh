@@ -8,7 +8,7 @@
 ################################################################################
 
 # Upcoming release (uncomment once published):
-METAPHACTORY_DOCKER_IMAGE=metaphacts/metaphactory:6.0.0
+METAPHACTORY_DOCKER_IMAGE=metaphacts/metaphactory:6.1.0
 TIMESTAMP="$(date +%s)"
 CONTAINER_NAME="metaphactory-sdk-${TIMESTAMP}"
 TEMP_FOLDER="./tmp/${CONTAINER_NAME}"

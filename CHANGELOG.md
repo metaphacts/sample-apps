@@ -2,6 +2,12 @@
 
 All notable changes to the metaphactory sample apps are documented here.
 
+
+## 6.1.0
+
+- Update sample apps for metaphactory 6.1.0
+
+
 ## 6.0.0
 
 - Update sample apps for metaphactory 6.0.
